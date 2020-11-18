@@ -27,6 +27,8 @@ public class dashboard extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
+        GenerateNotif n=new GenerateNotif();
+       // n.get_all_online_users();
         setContentView(R.layout.activity_dashboard);
         test=findViewById(R.id.test3);
         upload_button=findViewById(R.id.upload_prescription);
@@ -36,6 +38,7 @@ public class dashboard extends AppCompatActivity
         signout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 startActivity(new Intent(dashboard.this, login_Screen.class));
                 mAuth.signOut();
             }

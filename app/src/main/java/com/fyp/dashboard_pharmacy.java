@@ -23,7 +23,7 @@ public class dashboard_pharmacy extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(dashboard_pharmacy.this, pharmacy_status.class));
-                finish();
+
             }
 
         });

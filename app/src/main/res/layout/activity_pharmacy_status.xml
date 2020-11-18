@@ -47,6 +47,7 @@
 <androidx.appcompat.widget.SwitchCompat
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/accept_orders"
     android:text="Accept Orders"
     android:textSize="20sp"
     android:textColor="@color/black"/>
@@ -65,6 +66,7 @@
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/newnotif"
             android:text="Generate New Order Notification"
             android:textSize="20sp"
             android:textColor="@color/black"/>
@@ -83,6 +85,7 @@
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/accept_livechat"
             android:text="Accept Live Chat Request"
             android:textSize="20sp"
             android:textColor="@color/black"/>

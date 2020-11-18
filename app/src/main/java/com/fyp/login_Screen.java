@@ -136,17 +136,60 @@ public class login_Screen extends AppCompatActivity {
             }
             case "Laboratory":
             {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Toast.makeText(login_Screen.this,"Success",Toast.LENGTH_LONG).show();
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    startActivity(new Intent(login_Screen.this, dashboard_lab.class));
 
-                        startActivity(new Intent(login_Screen.this, dashboard_lab.class));
-                        finish();
+                                }
+                                else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w("chk", "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(login_Screen.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                    updateUI(null);
+                                }
+
+
+
+                            }
+                        });
+
+
                         break;
 
         }
             case "Pharmacy":
             {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Toast.makeText(login_Screen.this,"Success",Toast.LENGTH_LONG).show();
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    startActivity(new Intent(login_Screen.this, dashboard_pharmacy.class));
+                                    finish();
+                                }
+                                else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w("chk", "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(login_Screen.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                    updateUI(null);
+                                }
 
-                        startActivity(new Intent(login_Screen.this, dashboard_pharmacy.class));
-                        finish();
+
+
+                            }
+                        });
+
                         break;
 
             }

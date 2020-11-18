@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.fyp">
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo_splash"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo_splash"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".signup"></activity>
+        <activity android:name=".pharmacy_prescription_upload" />
+        <activity android:name=".order_accepted_lab" />
+        <activity android:name=".searching_lab" />
+        <activity android:name=".customer_book_test" />
+        <activity android:name=".lab_order_in_progress" />
+        <activity android:name=".lab_price_order" />
+        <activity android:name=".order_request_page_lab" />
+        <activity android:name=".buy_requests_lab" />
+        <activity android:name=".dashboard_notif_lab" />
+        <activity android:name=".lab_status" />
+        <activity android:name=".dashboard_lab" />
+        <activity android:name=".live_chat" />
+        <activity android:name=".customer_order_processed" />
+        <activity android:name=".customer_custom_request" />
+        <activity android:name=".pharmacy_order_in_progress" />
+        <activity android:name=".pharmacy_price_order" />
+        <activity android:name=".order_request_page" />
+        <activity android:name=".Buy_Requests" />
+        <activity android:name=".dashboard_notif" />
+        <activity android:name=".pharmacy_status" />
+        <activity android:name=".dashboard_pharmacy" />
+        <activity android:name=".order_accepted" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".searching_deliverer"
+            android:label="@string/title_activity_searching_deliverer" />
+        <activity android:name=".upload_prescription" />
+        <activity android:name=".dashboard" />
+        <activity android:name=".splash_screen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".login_Screen" />
+    </application>
+
+</manifest>

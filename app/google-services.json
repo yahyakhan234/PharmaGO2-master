@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "329073721218",
+    "firebase_url": "https://pharmago-fc9f6.firebaseio.com",
+    "project_id": "pharmago-fc9f6",
+    "storage_bucket": "pharmago-fc9f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329073721218:android:06b9d3dada46a5ca3c999b",
+        "android_client_info": {
+          "package_name": "com.fyp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329073721218-ks6aer89php4lclroe778md5c6vgi21h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fyp",
+            "certificate_hash": "e05a5800468001db0e5805e35f909d3fb1f0ccdb"
+          }
+        },
+        {
+          "client_id": "329073721218-38bpdfn6ku95pl5evp7qbse5uim0cael.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGbmwYqBy8zlB9vN1FuYNIFZZfbZCookM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329073721218-38bpdfn6ku95pl5evp7qbse5uim0cael.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

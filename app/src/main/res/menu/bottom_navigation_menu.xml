@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Browse"
+        android:id="@+id/bottomNavigationBrowse"
+        android:icon="@drawable/location_vector"/>
+    <item android:title="Completed"
+        android:id="@+id/bottomNavigationCompleted"
+        android:icon="@drawable/completed_vector"/>
+    <item android:title="pending"
+        android:id="@+id/bottomNavigationPending"
+        android:icon="@drawable/pending_vector"/>
+    <item android:title="profile"
+        android:id="@+id/bottomNavigationProfile"
+        android:icon="@drawable/profile_vector"/>
+    <item android:title="Setting"
+        android:id="@+id/bottomNavigationSetting"
+        android:icon="@drawable/profile_vector"/>
+</menu>

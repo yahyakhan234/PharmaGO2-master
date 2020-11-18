@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PharmaGO</string>
+    <string name="title_activity_searching_deliverer">searching_deliverer</string>
+    <string name="delivery_calcellation_note">Your order will be accepted automatically if not cancelled within 5 minutes of placing the order</string>
+    <string name="side_note">Side Note: Please check the expiery date prior to sending</string>
+    <string name="wait_for_process">Your order is processing, you will be notified when your order is ready to be delivered. Here is what you can do while you wait:</string>
+</resources>

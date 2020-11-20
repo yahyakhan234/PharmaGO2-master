@@ -24,6 +24,7 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.tiper.MaterialSpinner;
 
 public class login_Screen extends AppCompatActivity {
@@ -110,6 +111,8 @@ public class login_Screen extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
+
+
                                     Toast.makeText(login_Screen.this,"Success",Toast.LENGTH_LONG).show();
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     startActivity(new Intent(login_Screen.this, dashboard.class));

@@ -5,19 +5,35 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.fyp.SendNotificationPack.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class dashboard extends AppCompatActivity
 {
+    String refreshToken;
     MaterialButton upload_button,custom_order,signout_button;
     Button test;
     BottomNavigationView bottomNavigationMenu;
@@ -27,14 +43,30 @@ public class dashboard extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        GenerateNotif n=new GenerateNotif();
-       // n.get_all_online_users();
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final FirebaseUser firebaseUser=mAuth.getCurrentUser();
         setContentView(R.layout.activity_dashboard);
         test=findViewById(R.id.test3);
         upload_button=findViewById(R.id.upload_prescription);
         custom_order=findViewById(R.id.custom_request);
         bottomNavigationMenu=findViewById(R.id.bottom_navigation);
         signout_button=findViewById(R.id.signout_button);
+
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        Log.d("TOKEN","TOKEN GENERATED");
+                        refreshToken=task.getResult();
+                        updatetoken(refreshToken,firebaseUser,db);
+
+                        Log.d("TOKEN",refreshToken);
+                    }
+                });
+
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         signout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +125,32 @@ public class dashboard extends AppCompatActivity
 
 
     }
+    void updatetoken(String newtoken,FirebaseUser firebaseUser,FirebaseFirestore db){
 
+        Token token1= new Token(newtoken);
+        Map<String,Object> m=new HashMap<>();
+        m.put("token",newtoken);
+        db.collection("pharma_users_online")
+                .document(firebaseUser.getUid())
+                .set(m, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("tag", "Added Successfully");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("tag", "Error adding document", e);
+                    }
+                });
+        // Sign in success, update UI with the signed-in user's information
+        Log.d("chk", "refresh token part");
+
+
+
+
+    }
 }
 

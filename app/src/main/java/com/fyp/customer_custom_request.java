@@ -53,6 +53,8 @@ public class customer_custom_request extends AppCompatActivity {
         vi[2]= findViewById(R.id.med4);
         vi[3]= findViewById(R.id.med5);
         final Map<String, Object> meds = new HashMap<>();
+        GenerateNotif g=new GenerateNotif();
+        g.sendNotificationToAllUsers();
     proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

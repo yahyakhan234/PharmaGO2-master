@@ -55,14 +55,6 @@ public class login_Screen extends AppCompatActivity {
             super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null)
-        {
-
-            startActivity(new Intent(login_Screen.this, dashboard.class));
-
-
-
-        }
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

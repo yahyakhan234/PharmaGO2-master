@@ -7,7 +7,12 @@
     android:orientation="vertical"
     android:background="@drawable/background"
     tools:context=".dashboard_pharmacy">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/browse"
+    android:orientation="vertical"
+    android:visibility="visible">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -102,6 +107,59 @@
             app:backgroundTint="#00a599"
             tools:targetApi="m" />
     </RelativeLayout>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/settings"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="#00a599"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Settings"
+                android:textColor="#fff"
+
+
+                android:textSize="40sp"
+
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/signout_button"
+                android:text="Sign Out"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:layout_centerHorizontal="true"
+                style="@android:style/Widget.Material.Button.Colored"
+                tools:targetApi="m"
+                app:backgroundTint="#00a599"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
     <RelativeLayout
@@ -110,7 +168,7 @@
 >
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+            android:id="@+id/bottom_navigation_pharmacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
@@ -124,7 +182,6 @@
 
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

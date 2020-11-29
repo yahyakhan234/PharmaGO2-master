@@ -45,7 +45,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
                 .setSmallIcon(R.drawable.logo_splash)
                 .setContentTitle("New Buy Request")
-                .setContentText("New Buy Request From Customer XYZ")
+                .setContentText("New Buy Request From "+message+".Tap To View")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)

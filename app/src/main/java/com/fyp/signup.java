@@ -62,7 +62,7 @@ public class signup extends AppCompatActivity {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = em.getEditText().getText().toString();
+                final String email = em.getEditText().getText().toString();
                 String password = pw.getEditText().getText().toString();
                  username = unm.getEditText().getText().toString();
                 String full_name= name.getEditText().getText().toString();
@@ -79,7 +79,7 @@ public class signup extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    db.collection("users").document(username)
+                                    db.collection("users").document(email)
                                             .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {

@@ -9,12 +9,13 @@
     android:background="#fff"
     android:padding="20dp"
     >
+
     <ImageView
         android:id="@+id/logo_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:transitionName="logo_image"
-        android:src="@drawable/logo_splash"/>
+        android:layout_width="165dp"
+        android:layout_height="151dp"
+        android:src="@drawable/logo_splash"
+        android:transitionName="logo_image" />
 <TextView
     android:id="@+id/logo_text"
     android:layout_width="wrap_content"

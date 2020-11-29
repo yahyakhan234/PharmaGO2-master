@@ -40,18 +40,20 @@ public class customer_custom_request extends AppCompatActivity {
         final String email= currentUser.getEmail();
         addItem=findViewById(R.id.addItem);
         proceed = findViewById(R.id.search_deliverer);
-        final TextInputLayout med[]=new TextInputLayout[4];
-        String medname[]=new String[4];
-        final View[] vi=new View[4];
+        final TextInputLayout med[]=new TextInputLayout[5];
+        String medname[]=new String[5];
+        final View[] vi=new View[5];
         med[0]=findViewById(R.id.med1);
         med[1]=findViewById(R.id.med2);
         med[2]=findViewById(R.id.med3);
         med[3]=findViewById(R.id.med4);
+        med[4]=findViewById(R.id.med5);
 
-        vi[0]= findViewById(R.id.med2);
-        vi[1]= findViewById(R.id.med3);
-        vi[2]= findViewById(R.id.med4);
-        vi[3]= findViewById(R.id.med5);
+        vi[0]= findViewById(R.id.med1);
+        vi[1]= findViewById(R.id.med2);
+        vi[2]= findViewById(R.id.med3);
+        vi[3]= findViewById(R.id.med4);
+        vi[4]= findViewById(R.id.med5);
         final Map<String, Object> meds = new HashMap<>();
         GenerateNotif g=new GenerateNotif();
         g.sendNotificationToAllUsers();
@@ -64,7 +66,7 @@ public class customer_custom_request extends AppCompatActivity {
 
                 }
                 else {
-                    for (int i = 0; i < counter; i++) {
+                    for (int i = 0; i <= counter; i++) {
                         String s= MED_KEY+String.valueOf(i);
                         meds.put(s,med[i].getEditText().getText().toString());
 
@@ -95,10 +97,11 @@ public class customer_custom_request extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(counter<4) {
+                if(counter<=4) {
 
                     items = (TextInputLayout) vi[counter];
                     items.setVisibility(View.VISIBLE);
+                    if(counter!=4)
                     counter++;
                 }
 

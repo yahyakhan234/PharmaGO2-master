@@ -1,5 +1,7 @@
 package com.fyp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,6 +11,7 @@ import com.fyp.SendNotificationPack.Data;
 import com.fyp.SendNotificationPack.MyResponse;
 import com.fyp.SendNotificationPack.NotificationSender;
 import com.fyp.classes.online_user;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,13 +26,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class GenerateNotif {
     private APIService apiService;
     private LinkedList<online_user> onlineUsers=new LinkedList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference usersRef = db.collection("pharma_users_online");
-
-
     public void sendNotificationToAllUsers() {
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
@@ -44,6 +47,11 @@ public class GenerateNotif {
                     return;
                 }
                 online_user new_user=new online_user();
+
+                SharedPreferences sharedPreferences;
+
+
+
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     // Note note = documentSnapshot.toObject(Note.class);
                     new_user.setUID(documentSnapshot.getId());
@@ -52,7 +60,7 @@ public class GenerateNotif {
                     // String userID=documentSnapshot.getId();
                     //String userToken=documentSnapshot.getString("UID");
 
-                    sendNotifications(new_user.getUToken(),"Hello","NIGGGAAAA");
+                    sendNotifications(new_user.getUToken(),"Hello", "Customer");
                     Log.d("Token Check",new_user.getUID()+" "+new_user.getUToken());
                 /*    note.setDocumentId(documentSnapshot.getId());
                     String documentId = note.getDocumentId();

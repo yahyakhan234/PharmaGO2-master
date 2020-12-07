@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class splash_screen extends AppCompatActivity {
 
-    private static int SPLASH_ANIM=3000;
+    private final static int SPLASH_ANIM=2000;
     Animation animtop,animbottom;
     ImageView splashLogo;
     TextView splashText;
@@ -53,8 +54,9 @@ public class splash_screen extends AppCompatActivity {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         final FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null) {
 
+
+      /*  if(currentUser!=null) {
             db.collection("users")
                     .document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -62,7 +64,9 @@ public class splash_screen extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists()) {
                                 String user_type = documentSnapshot.getString(signup.USER_TYPE_KEY);
-                                switch (user_type) {
+                              /*  String FullName=sharedPreferences.getString("USER_TYPE","");
+
+                                switch (FullName) {
                                     case "Patient": {
 
                                         startActivity(new Intent(splash_screen.this, dashboard.class));
@@ -82,13 +86,13 @@ public class splash_screen extends AppCompatActivity {
 
                                     }
 
-                                }
+                                }*/
                                             /*notif=documentSnapshot.getBoolean(RECEIVE_NOTIFICATION);
                                             orders=documentSnapshot.getBoolean(RECEIVE_ORDERS);
                                             chat=documentSnapshot.getBoolean(RECEIVE_LIVE_CHAT);*/
 
 
-                            }
+                       /*     }
 
                         }
                     })
@@ -99,7 +103,7 @@ public class splash_screen extends AppCompatActivity {
                         }
                     });
 
-        }
+        }*/
 
 
 
@@ -122,6 +126,36 @@ public class splash_screen extends AppCompatActivity {
                         startActivity(intent, options.toBundle());
 
                         finish();
+                    }
+                    else
+                    {
+                        final SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+
+                        String FullName=sharedPreferences.getString("USER_TYPE","");
+
+                        switch (FullName) {
+                            case "Patient": {
+
+                                startActivity(new Intent(splash_screen.this, dashboard.class));
+                                finish();
+                                break;
+
+                            }
+                            case "Laboratory": {
+
+
+                            }
+                            case "Pharmacy": {
+
+                                startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));
+                                finish();
+                                break;
+
+                            }
+
+                        }
+
+
                     }
                 }
             }

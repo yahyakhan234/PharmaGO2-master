@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/horizontal_linear_med">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="200dp"
+
+                    android:layout_height="wrap_content"
+                    android:id="@+id/med"
+                    android:hint="Medicine 1"
+                    android:textColor="#000"
+                    app:boxStrokeColor="@color/black"
+                    android:textColorHint="#000"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/qty"
+                    android:layout_marginLeft="15dp"
+                    android:hint="Quantity"
+                    android:textColor="#000"
+                    app:boxStrokeColor="@color/black"
+                    android:textColorHint="#000"
+                    android:layout_gravity="right"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+
+                        android:textColor="@color/black"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Type"
+                    android:id="@+id/type_selector"
+                    android:textColor="#000"
+                    app:boxStrokeColor="@color/black"
+                    android:textColorHint="#000">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/filled_exposed_dropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+
+                        android:textColorHighlight="@color/black"
+                        android:textColorHint="@color/black"
+                        android:inputType="none"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+    </LinearLayout>

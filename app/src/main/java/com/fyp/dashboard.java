@@ -3,13 +3,16 @@ package com.fyp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fyp.SendNotificationPack.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +46,7 @@ public class dashboard extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-
+        SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         final FirebaseUser firebaseUser=mAuth.getCurrentUser();
         setContentView(R.layout.activity_dashboard);
@@ -52,8 +55,9 @@ public class dashboard extends AppCompatActivity
         custom_order=findViewById(R.id.custom_request);
         bottomNavigationMenu=findViewById(R.id.bottom_navigation);
         signout_button=findViewById(R.id.signout_button);
-
-
+        TextView welcome=findViewById(R.id.welcome_text);
+        String FullName=sharedPreferences.getString("NAME","");
+        welcome.setText("Welcome "+FullName);
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override

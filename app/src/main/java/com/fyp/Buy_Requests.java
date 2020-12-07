@@ -19,13 +19,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class Buy_Requests extends AppCompatActivity {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference ordersRef = db.collection("orders");
+    private FirebaseFirestore db ;
+//    private CollectionReference ordersRef = db.collection("orders");
     public static final String PRESC_UPLOAD_TEXT="Prescription Upload";
     public static final String CUSTOM_ORDER_TEXT="Custom Order";
     order new_order;
@@ -40,7 +41,13 @@ public class Buy_Requests extends AppCompatActivity {
         /*MaterialButton b2=findViewById(R.id.details);
         MaterialButton b1 = findViewById(R.id.details1);*/
         final Context context=this;
-        ordersRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+
+        db=FirebaseFirestore.getInstance();
+        db.setFirestoreSettings(settings);
+        db.collection("orders").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
                 if (e != null) {

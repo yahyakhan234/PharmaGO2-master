@@ -35,6 +35,7 @@ public class order_request_page extends AppCompatActivity
     public static final String CONTAINER_ID="100";
     public static final String MED_ID="101";
     public static final String QTY_ID="102";
+    String s;
 
     private GoogleMap mMap;
     public MaterialButton accept_button;
@@ -51,7 +52,7 @@ public class order_request_page extends AppCompatActivity
 
          context=this;
         accept_button=findViewById(R.id.accept_order);
-        String s=getIntent().getStringExtra("Email");
+        s=getIntent().getStringExtra("Email");
         db.collection("orders").document(s).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -86,7 +87,7 @@ public class order_request_page extends AppCompatActivity
         accept_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(order_request_page.this, pharmacy_price_order.class));
+                startActivity(new Intent(order_request_page.this, pharmacy_price_order.class).putExtra("Email",s));
                 finish();
             }
 

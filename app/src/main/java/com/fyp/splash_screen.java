@@ -23,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class splash_screen extends AppCompatActivity {
@@ -121,6 +123,7 @@ public class splash_screen extends AppCompatActivity {
                 //wrap the call in API level 21 or higher
                 if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.LOLLIPOP)
                 {
+
                     if(currentUser==null) {
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(splash_screen.this, pairs);
                         startActivity(intent, options.toBundle());
@@ -136,9 +139,11 @@ public class splash_screen extends AppCompatActivity {
                         switch (FullName) {
                             case "Patient": {
 
-                                startActivity(new Intent(splash_screen.this, dashboard.class));
-                                finish();
-                                break;
+                                    startActivity(new Intent(splash_screen.this, dashboard.class));
+                                    finish();
+                                    break;
+
+
 
                             }
                             case "Laboratory": {
@@ -147,9 +152,11 @@ public class splash_screen extends AppCompatActivity {
                             }
                             case "Pharmacy": {
 
-                                startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));
-                                finish();
-                                break;
+
+                                        startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));
+                                        finish();
+                                        break;
+
 
                             }
 
@@ -160,5 +167,15 @@ public class splash_screen extends AppCompatActivity {
                 }
             }
         },SPLASH_ANIM);
+    }
+    public boolean isInternetAvailable() throws UnknownHostException {
+
+            InetAddress ipAddr = InetAddress.getByName("google.com");
+            //You can replace it with your name
+            if(!ipAddr.equals(""))
+            return false;
+            else
+            return true;
+
     }
 }

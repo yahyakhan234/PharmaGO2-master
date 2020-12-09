@@ -61,6 +61,8 @@ public class dashboard_pharmacy extends AppCompatActivity {
         status_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+               // new GenerateNotif().sendNotificationToSingleUser("N3ocfZdKvcVuh0BaFiHumEgOBhR2");
                 startActivity(new Intent(dashboard_pharmacy.this, pharmacy_status.class));
 
             }

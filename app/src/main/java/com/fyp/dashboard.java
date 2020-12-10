@@ -82,8 +82,8 @@ public class dashboard extends AppCompatActivity
         upload_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(dashboard.this, upload_prescription.class));
-
+                //startActivity(new Intent(dashboard.this, upload_prescription.class));
+                startActivity(new Intent(dashboard.this,customer_order_processed.class));
             }
         });
         custom_order.setOnClickListener(new View.OnClickListener() {

@@ -1,4 +1,5 @@
 package com.fyp.SendNotificationPack;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.fyp.Buy_Requests;
+import com.fyp.customer_order_processed;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.fyp.R;
@@ -79,7 +81,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     private void acceptOrder(String title,String message) {
         // Builds your notification
         // Create an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, Buy_Requests.class);
+        Intent intent = new Intent(this, customer_order_processed.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
@@ -91,11 +93,10 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
+        Notification notification=builder.build();
+        notification.flags|=Notification.FLAG_INSISTENT;
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        notificationManager.notify(1, builder.build());
-
-
+        notificationManager.notify(1, notification);
     }
 
 }

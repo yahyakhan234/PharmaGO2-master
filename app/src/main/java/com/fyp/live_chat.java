@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +36,7 @@ public class live_chat extends AppCompatActivity {
     private int Count=1,pCount,a;
     private MaterialButton SendButton;
     private int updateCount;
-    private boolean isUpdated;
+    private boolean sendNotification;
 
     private static final String MESSAGE_KEY="message";
     @Override
@@ -97,11 +98,11 @@ public class live_chat extends AppCompatActivity {
                             map.put("message"+a,message);
                             map.put("count",Integer.toString(a));
                             db.collection("live_chat").document("LC101").set(map,SetOptions.merge());
-
+                            GenerateNotif generateNotif=new GenerateNotif();
+                            generateNotif.sendNewMessageNotification(documentSnapshot.getString("PID"));
                         }
                     });
                     //Make count dynamic, setonchangelistner in OnResume()
-
                 }
             }
         });
@@ -161,6 +162,12 @@ public class live_chat extends AppCompatActivity {
                     }
 
                 });
+
+        sendNotification=false;
+        SharedPreferences sharedPreferences =getSharedPreferences("LIVE_CHAT_DETAIL",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("IS_ACTIVE",sendNotification);
+        editor.commit();
     }
     void setChat(){
 
@@ -201,14 +208,22 @@ public class live_chat extends AppCompatActivity {
                         Log.d("CHECK", Objects.requireNonNull(message.get("message")).toString());
 
                 updateCount=Count;
-                isUpdated=true;
+                sendNotification=false;
+                SharedPreferences sharedPreferences =getSharedPreferences("LIVE_CHAT_DETAIL",MODE_PRIVATE);
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putBoolean("sendNotification",sendNotification);
+                editor.commit();
                     }
                 });
     }
     @Override
     protected void onPause() {
         super.onPause();
-        isUpdated=false;
+        sendNotification=true;
+        SharedPreferences sharedPreferences =getSharedPreferences("LIVE_CHAT_DETAIL",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("sendNotification",sendNotification);
+        editor.commit();
 
     }
 }

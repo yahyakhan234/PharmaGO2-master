@@ -96,7 +96,7 @@ public class dashboard_pharmacy extends AppCompatActivity {
                     public void onComplete(@NonNull Task<String> task) {
                         Log.d("TOKEN","TOKEN GENERATED");
                        refreshToken = task.getResult();
-                        updatetoken(refreshToken,firebaseUser,db);
+                      updatetoken(refreshToken,firebaseUser,db);
 
                         Log.d("TOKEN",refreshToken);
                     }

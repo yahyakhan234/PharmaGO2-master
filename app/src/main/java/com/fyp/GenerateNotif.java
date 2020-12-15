@@ -97,8 +97,18 @@ public class GenerateNotif {
                 sendNotifications(s,"Accept Order","You order has been processed. Please accept order, Tap to view");
             }
         });
+    }
+    public void sendNewMessageNotification(String UID){
 
-
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"live chat","Yo nigger");
+            }
+        });
     }
     public void sendNotificationToPharmacist(String PID){
 

@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -33,7 +34,7 @@ public class splash_screen extends AppCompatActivity {
     Animation animtop,animbottom;
     ImageView splashLogo;
     TextView splashText;
-
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,6 @@ public class splash_screen extends AppCompatActivity {
 
         splashText.setAnimation(animbottom);
         splashLogo.setAnimation(animtop);
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         final FirebaseUser currentUser = mAuth.getCurrentUser();
 
 
@@ -123,6 +121,11 @@ public class splash_screen extends AppCompatActivity {
                 //wrap the call in API level 21 or higher
                 if(android.os.Build.VERSION.SDK_INT>=android.os.Build.VERSION_CODES.LOLLIPOP)
                 {
+                    db=FirebaseFirestore.getInstance();
+                    FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                            .setPersistenceEnabled(false)
+                            .build();
+                    db.setFirestoreSettings(settings);
 
                     if(currentUser==null) {
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(splash_screen.this, pairs);

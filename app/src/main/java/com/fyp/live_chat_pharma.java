@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import co.intentservice.chatui.ChatView;
 import co.intentservice.chatui.models.ChatMessage;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +34,7 @@ public class live_chat_pharma extends AppCompatActivity {
     private int Count=1,pCount,a;
     private MaterialButton SendButton;
     private int updateCount;
-    private boolean isUpdated;
+    private boolean sendNotification;
 
     private static final String MESSAGE_KEY="message";
     @Override
@@ -155,6 +156,20 @@ public class live_chat_pharma extends AppCompatActivity {
                     }
 
                 });
+        sendNotification=false;
+        SharedPreferences sharedPreferences =getSharedPreferences("LIVE_CHAT_DETAIL",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("IS_ACTIVE",sendNotification);
+        editor.commit();
+        Log.d("lifecycle","Resumed");
     }
-
+    protected void onPause() {
+        super.onPause();
+        sendNotification=true;
+        SharedPreferences sharedPreferences =getSharedPreferences("LIVE_CHAT_DETAIL",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("IS_ACTIVE",sendNotification);
+        Log.d("lifecycle","Paused");
+        editor.commit();
+    }
 }

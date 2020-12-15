@@ -41,12 +41,13 @@ public class Buy_Requests extends AppCompatActivity {
         /*MaterialButton b2=findViewById(R.id.details);
         MaterialButton b1 = findViewById(R.id.details1);*/
         final Context context=this;
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
 
         db=FirebaseFirestore.getInstance();
-        db.setFirestoreSettings(settings);
+        //FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+          //      .setPersistenceEnabled(false)
+            //    .build();
+        //db.setFirestoreSettings(settings);
+
         db.collection("orders").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {

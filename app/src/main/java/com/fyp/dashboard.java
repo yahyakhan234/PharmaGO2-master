@@ -2,10 +2,15 @@ package com.fyp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,10 +42,16 @@ import java.util.Map;
 public class dashboard extends AppCompatActivity
 {
     String refreshToken;
-    MaterialButton upload_button,custom_order,signout_button;
+    MaterialButton upload_button,custom_order,signout_button,get_location;
     Button test;
     BottomNavigationView bottomNavigationMenu;
     private FirebaseAuth mAuth;
+    Location gps_loc;
+    Location network_loc;
+    Location final_loc;
+    double longitude;
+    double latitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +66,13 @@ public class dashboard extends AppCompatActivity
         custom_order=findViewById(R.id.custom_request);
         bottomNavigationMenu=findViewById(R.id.bottom_navigation);
         signout_button=findViewById(R.id.signout_button);
+        get_location=findViewById(R.id.get_location);
+
         TextView welcome=findViewById(R.id.welcome_text);
         String FullName=sharedPreferences.getString("NAME","");
         welcome.setText("Welcome "+FullName);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -83,8 +98,8 @@ public class dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 //startActivity(new Intent(dashboard.this, upload_prescription.class));
-                startActivity(new Intent(dashboard.this,customer_order_processed.class));
-            }
+                startActivity(new Intent(dashboard.this,live_chat.class));
+                    }
         });
         custom_order.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +113,12 @@ public class dashboard extends AppCompatActivity
             public void onClick(View v) {
                 startActivity(new Intent(dashboard.this, customer_book_test.class));
 
+            }
+        });
+        get_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnLocation();
             }
         });
         bottomNavigationMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -156,5 +177,44 @@ public class dashboard extends AppCompatActivity
 
 
     }
+    void returnLocation(){
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+        }
+
+            try {
+
+                gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                network_loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (gps_loc != null) {
+                final_loc = gps_loc;
+                latitude = final_loc.getLatitude();
+                longitude = final_loc.getLongitude();
+            } else if (network_loc != null) {
+                final_loc = network_loc;
+                latitude = final_loc.getLatitude();
+                longitude = final_loc.getLongitude();
+            } else {
+                latitude = 0.0;
+                longitude = 0.0;
+            }
+
+
+            Log.d("tag",Double.toString(latitude+longitude));
+
+    }
+
+
+
 }
 

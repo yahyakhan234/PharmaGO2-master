@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -121,6 +122,7 @@ public class pharmacy_price_order extends AppCompatActivity {
 
                 s=getIntent().getStringExtra("Email");
                 medicine_order.put(TOTAL_KEY,Integer.toString(bill));
+                medicine_order.put("PID", FirebaseAuth.getInstance().getCurrentUser().getUid());
                 db.collection("orders")
                         .document(s)
                         .set(medicine_order, SetOptions.merge())

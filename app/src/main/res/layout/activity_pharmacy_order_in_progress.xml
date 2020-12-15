@@ -28,11 +28,7 @@
             android:textStyle="bold" />
 
     </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
 
-        android:background="@android:color/darker_gray"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -304,19 +300,7 @@
         android:layout_height="wrap_content"
 
 
-        >
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            app:itemIconTint="#fff"
-            app:itemTextColor="#fff"
-            app:menu="@menu/bottom_navigation_menu"
-            android:layout_alignParentBottom="true"/>
-
-
-    </RelativeLayout>
+        />
 
 
 

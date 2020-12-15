@@ -100,6 +100,25 @@ public class GenerateNotif {
 
 
     }
+    public void sendNotificationToPharmacist(String PID){
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+        usersRef.document(PID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Order Accepted","You order has been accepted. Please deliver order, Tap to view");
+            }
+        });
+
+
+
+
+    }
 
     public void get_all_online_users(){
 

@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -195,7 +196,7 @@ public class customer_custom_request extends AppCompatActivity {
                     medicine_order.put(TIME_KEY,date);
                     medicine_order.put(ORDER_TYPE_KEY,"Custom Order");
                     db.collection("entityCount").document("TotalOrders")
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            .get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             String s=documentSnapshot.getString("latest_order_number");

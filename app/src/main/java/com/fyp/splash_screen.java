@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
@@ -16,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fyp.classes.checkInternet;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,6 +38,7 @@ public class splash_screen extends AppCompatActivity {
     Animation animtop,animbottom;
     ImageView splashLogo;
     TextView splashText;
+    boolean internet;
     FirebaseFirestore db;
 
     @Override
@@ -114,7 +119,7 @@ public class splash_screen extends AppCompatActivity {
             @Override
             public void run(){
                 //Call next screen
-                Intent intent=new Intent(splash_screen.this,login_Screen.class);
+                final Intent intent=new Intent(splash_screen.this,login_Screen.class);
                 // Attach all the elements those you want to animate in design
                 Pair[] pairs=new Pair[2];pairs[0]=new Pair<View, String>(splashLogo,"logo_image");
                 pairs[1]=new Pair<View, String>(splashText,"logo_text");
@@ -125,60 +130,62 @@ public class splash_screen extends AppCompatActivity {
                     FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                             .setPersistenceEnabled(false)
                             .build();
-                    db.setFirestoreSettings(settings);
+                  internet=isNetworkAvailable();
+                    if (internet) {
+                        if (currentUser == null) {
+                            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(splash_screen.this, pairs);
+                            startActivity(intent, options.toBundle());
 
-                    if(currentUser==null) {
-                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(splash_screen.this, pairs);
-                        startActivity(intent, options.toBundle());
+                            finish();
+                        } else {
+                            final SharedPreferences sharedPreferences = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
 
-                        finish();
-                    }
-                    else
-                    {
-                        final SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+                            String FullName = sharedPreferences.getString("USER_TYPE", "");
 
-                        String FullName=sharedPreferences.getString("USER_TYPE","");
-
-                        switch (FullName) {
-                            case "Patient": {
+                            switch (FullName) {
+                                case "Patient": {
 
                                     startActivity(new Intent(splash_screen.this, dashboard.class));
                                     finish();
                                     break;
 
 
+                                }
+                                case "Laboratory": {
+
+
+                                }
+                                case "Pharmacy": {
+
+
+                                    startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));
+                                    finish();
+                                    break;
+
+
+                                }
 
                             }
-                            case "Laboratory": {
 
-
-                            }
-                            case "Pharmacy": {
-
-
-                                        startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));
-                                        finish();
-                                        break;
-
-
-                            }
 
                         }
-
-
+                    }
+                    else {
+                        startActivity(new Intent(splash_screen.this,nointernet.class));
+                        finish();
                     }
                 }
             }
         },SPLASH_ANIM);
     }
-    public boolean isInternetAvailable() throws UnknownHostException {
 
-            InetAddress ipAddr = InetAddress.getByName("google.com");
-            //You can replace it with your name
-            if(!ipAddr.equals(""))
-            return false;
-            else
-            return true;
 
-    }
+        public boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null;
+        }
+
+
 }

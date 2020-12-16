@@ -2,7 +2,10 @@ package com.fyp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,17 +23,19 @@ public class nointernet extends AppCompatActivity {
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                splash_screen s=new splash_screen();
-                try {
-                    if(s.isInternetAvailable())
+
+
+                    if(isNetworkAvailable())
                     {
                         startActivity(new Intent(nointernet.this,splash_screen.class));
                     }
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
-
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null;
+    }
 }

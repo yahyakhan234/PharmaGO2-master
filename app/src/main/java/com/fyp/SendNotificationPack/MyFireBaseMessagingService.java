@@ -41,6 +41,9 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
             acceptOrder(title,message);
 
         }
+        else if(title.equalsIgnoreCase("Prepare Order")){
+            prepareOrder(title,message);
+        }
         else {
             addNotification(title, message);
         }
@@ -113,7 +116,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
         String  s=sharedPreferences.getString("USER_TYPE","");
         Class cls;
-        if (s.equalsIgnoreCase("pharma")){
+        if (s.equalsIgnoreCase("Patient")){
             cls=live_chat.class;
         }
         else {
@@ -138,6 +141,25 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(1, builder.build());
 
 
+    }
+
+    private void prepareOrder(String title,String message) {
+        Intent intent = new Intent(this, customer_order_processed.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.drawable.logo_splash)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        Notification notification=builder.build();
+        notification.flags|=Notification.FLAG_INSISTENT;
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, notification);
     }
 
 }

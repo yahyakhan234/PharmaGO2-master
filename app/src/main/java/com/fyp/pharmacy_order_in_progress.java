@@ -28,7 +28,6 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "https://maps.app.goo.gl/FPUMyAJ2W9Mx39Gi6");
                 sendIntent.setType("text/plain");
-
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
 

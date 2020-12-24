@@ -102,22 +102,8 @@ public class Buy_Requests extends AppCompatActivity {
                             }
                         }
                     });
+                      Log.d("Token Check",new_order.getEmail()+" "+new_order.getOrder_type());
 
-
-
-
-                  //  onlineUsers.add(new_user);
-                    // String userID=documentSnapshot.getId();
-                    //String userToken=documentSnapshot.getString("UID");
-
-                  //  sendNotifications(new_user.getUToken(),"Hello","NIGGGAAAA");
-                    Log.d("Token Check",new_order.getEmail()+" "+new_order.getOrder_type());
-                /*    note.setDocumentId(documentSnapshot.getId());
-                    String documentId = note.getDocumentId();
-                    String title = note.getTitle();
-                    String description = note.getDescription();
-                    data += "ID: " + documentId
-                            + "\nTitle: " + title + "\nDescription: " + description + "\n\n";*/
                 }
             }
         });

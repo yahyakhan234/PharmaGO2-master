@@ -12,12 +12,12 @@
     android:layout_height="wrap_content"
     android:id="@+id/browse"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:visibility="visible">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:background="#00a599">
+        android:background="@color/primaryTheme">
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,193 +43,268 @@
             />
 
     </RelativeLayout>
-
     <RelativeLayout
+        android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="200dp"
+        android:gravity="center" >
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/upload_prescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="Upload Prescription"
-            android:textSize="20sp"
-            android:padding="10dp"
+        <ProgressBar
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:indeterminate="true"
 
-            style="@android:style/Widget.Material.Button.Colored"
-            tools:targetApi="m"
-            app:backgroundTint="#00a599"
-            android:layout_centerHorizontal="true"
             />
     </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="OR"
-            android:textColor="@color/black"
-            android:layout_centerHorizontal="true"
-            />
-
-    </RelativeLayout>
 
     <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@color/primaryTheme"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:id="@+id/pending_order_view"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:contentDescription="Image"
+                android:id="@+id/image_pending"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/pending_order"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pending Order"
+                android:layout_margin="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+
+                android:layout_toRightOf="@+id/image_pending"
+                android:layout_alignParentTop="true"
+                android:textSize="20sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:layout_toRightOf="@+id/image_pending"
+                android:layout_margin="5dp"
+                android:text="You have an order in pending state, tap to view details"
+                />
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/custom_request"
-            android:text="POST CUSTOM REQUEST"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:padding="10dp"
-            android:layout_centerHorizontal="true"
-            style="@android:style/Widget.Material.Button.Colored"
-            tools:targetApi="m"
-            app:backgroundTint="#00a599"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:padding="10dp"
-        android:text="Select a Lab Test below to make a laboratory reservation"
-        android:textColor="@color/black"
-        android:layout_centerHorizontal="true"
-        android:justificationMode="inter_word"
-        />
-    </RelativeLayout>
-
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/new_order_cluster"
         >
-        <LinearLayout
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/upload_prescription"
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="10dp"
+                android:text="Upload Prescription"
+
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:backgroundTint="#00a599"
+                tools:targetApi="m" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="OR"
+                android:textColor="@color/black"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/custom_request"
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="10dp"
+                android:text="POST CUSTOM REQUEST"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:backgroundTint="#00a599"
+                tools:targetApi="m" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:text="Select a Lab Test below to make a laboratory reservation"
+                android:textColor="@color/black"
+                android:layout_centerHorizontal="true"
+                android:justificationMode="inter_word"
+                />
+        </RelativeLayout>
+
+        <HorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
-
-                <Button
-                    android:id="@+id/test1"
-                    android:layout_width="150dp"
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/md_transparent"
+                    android:layout_weight="0.5">
 
-                    android:gravity="center|bottom"
+                    <Button
+                        android:id="@+id/test1"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
 
-                    android:text="Cholestrol Test"
-                    android:textSize="15sp" />
+                        android:gravity="center|bottom"
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/labtest"
-                    android:scaleType="fitStart"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                        android:text="Cholestrol Test"
+                        android:textSize="15sp" />
 
-                <Button
-                    android:id="@+id/test2"
-                    android:layout_width="150dp"
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/labtest"
+                        android:scaleType="fitStart"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/md_transparent"
+                    android:layout_weight="0.5">
 
-                    android:gravity="center|bottom"
+                    <Button
+                        android:id="@+id/test2"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
 
-                    android:text="Corona Virus Test"
-                    android:textSize="15sp" />
+                        android:gravity="center|bottom"
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/labtest"
-                    android:scaleType="fitStart"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
+                        android:text="Corona Virus Test"
+                        android:textSize="15sp" />
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/labtest"
+                        android:scaleType="fitStart"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
 
-                <Button
-                    android:id="@+id/test3"
-                    android:layout_width="150dp"
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/md_transparent"
+                    android:layout_weight="0.5">
 
-                    android:gravity="center|bottom"
+                    <Button
+                        android:id="@+id/test3"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
 
-                    android:text="Blood Sugar Test"
-                    android:textSize="15sp" />
+                        android:gravity="center|bottom"
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/labtest"
-                    android:scaleType="fitStart"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
+                        android:text="Blood Sugar Test"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/labtest"
+                        android:scaleType="fitStart"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
 
 
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
-
-                <Button
-                    android:id="@+id/test4"
-                    android:layout_width="150dp"
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/md_transparent"
+                    android:layout_weight="0.5">
 
-                    android:gravity="center|bottom"
+                    <Button
+                        android:id="@+id/test4"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/md_transparent"
 
-                    android:text="Blood CP"
-                    android:textSize="15sp" />
+                        android:gravity="center|bottom"
 
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/labtest"
+                        android:text="Blood CP"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/labtest"
+                        android:scaleType="fitStart"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <ImageButton
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/home_icon"
                     android:scaleType="fitStart"
-                    android:layout_centerInParent="true"/>
-            </RelativeLayout>
+                    android:visibility="invisible"
+                    />
 
-            <ImageButton
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_margin="20dp"
-                android:src="@drawable/home_icon"
-                android:scaleType="fitStart"
-                android:visibility="invisible"
-                />
+            </LinearLayout>
 
-        </LinearLayout>
+        </HorizontalScrollView>
 
-    </HorizontalScrollView>
+    </LinearLayout>
+
 
 
 
@@ -240,7 +315,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/settings"
-        android:visibility="visible">
+        android:visibility="gone">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

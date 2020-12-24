@@ -35,7 +35,6 @@ public class live_chat_pharma extends AppCompatActivity {
     private MaterialButton SendButton;
     private int updateCount;
     private boolean sendNotification;
-
     private static final String MESSAGE_KEY="message";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +95,8 @@ public class live_chat_pharma extends AppCompatActivity {
                             map.put("message"+a,message);
                             map.put("count",Integer.toString(a));
                             db.collection("live_chat").document("LC101").set(map,SetOptions.merge());
-
+                            GenerateNotif generateNotif=new GenerateNotif();
+                            generateNotif.sendNewMessageNotification(documentSnapshot.getString("UID"));
                         }
                     });
                     //Make count dynamic, setonchangelistner in OnResume()

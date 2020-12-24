@@ -7,8 +7,8 @@
         android:id="@+id/bottomNavigationCompleted"
         android:icon="@drawable/completed_vector"/>
     <item android:title="pending"
-        android:id="@+id/bottomNavigationPending"
-        android:icon="@drawable/pending_vector"/>
+        android:id="@+id/bottomNavigationProgress"
+        android:icon="@drawable/in_progress_icon"/>
     <item android:title="profile"
         android:id="@+id/bottomNavigationProfile"
         android:icon="@drawable/profile_vector"/>

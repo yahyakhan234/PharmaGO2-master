@@ -17,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fyp.SendNotificationPack.Token;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,8 +31,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Source;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -45,12 +49,16 @@ public class dashboard extends AppCompatActivity
     MaterialButton upload_button,custom_order,signout_button,get_location;
     Button test;
     BottomNavigationView bottomNavigationMenu;
+    RelativeLayout pending_order,loading_layout;
+    LinearLayout new_order_cluster;
+    String status;
     private FirebaseAuth mAuth;
     Location gps_loc;
     Location network_loc;
     Location final_loc;
     double longitude;
     double latitude;
+    FirebaseFirestore db;
 
 
     @Override
@@ -58,7 +66,7 @@ public class dashboard extends AppCompatActivity
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         final FirebaseUser firebaseUser=mAuth.getCurrentUser();
         setContentView(R.layout.activity_dashboard);
         test=findViewById(R.id.test3);
@@ -67,11 +75,32 @@ public class dashboard extends AppCompatActivity
         bottomNavigationMenu=findViewById(R.id.bottom_navigation);
         signout_button=findViewById(R.id.signout_button);
         get_location=findViewById(R.id.get_location);
-
+        pending_order=findViewById(R.id.pending_order_view);
+        new_order_cluster=findViewById(R.id.new_order_cluster);
         TextView welcome=findViewById(R.id.welcome_text);
+        loading_layout=findViewById(R.id.loadingPanel);
         String FullName=sharedPreferences.getString("NAME","");
         welcome.setText("Welcome "+FullName);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+
+        db.collection("users").document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER)
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.getBoolean("is_ordering"))
+                {
+                    loading_layout.setVisibility(View.GONE);
+                    new_order_cluster.setVisibility(View.GONE);
+                    pending_order.setVisibility(View.VISIBLE);
+                }
+                else {
+                    loading_layout.setVisibility(View.GONE);
+                    new_order_cluster.setVisibility(View.VISIBLE);
+                    pending_order.setVisibility(View.GONE);
+                }
+                status=documentSnapshot.getString("status");
+            }
+        });
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -113,6 +142,26 @@ public class dashboard extends AppCompatActivity
             public void onClick(View v) {
                 startActivity(new Intent(dashboard.this, customer_book_test.class));
 
+            }
+        });
+        pending_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(dashboard.this,"Clicked",Toast.LENGTH_SHORT).show();
+                switch (status){
+                    case "searching":{
+                        startActivity(new Intent(dashboard.this,searching_deliverer.class));
+                        break;
+                    }
+                    case "priced":{
+                    startActivity(new Intent(dashboard.this,customer_order_processed.class));
+                    break;
+                    }
+                    case "accepted":{
+                        startActivity(new Intent(dashboard.this,customer_order_processed.class));
+                    }
+
+                }
             }
         });
         get_location.setOnClickListener(new View.OnClickListener() {
@@ -209,6 +258,25 @@ public class dashboard extends AppCompatActivity
                 longitude = 0.0;
             }
 
+
+            db=FirebaseFirestore.getInstance();
+            Map<String,Object> map=new HashMap<>();
+            map.put("is_located",true);
+            map.put("lat",Double.toString(latitude));
+            map.put("long",Double.toString(longitude));
+            db.collection("pharma_users_online")
+                    .document(FirebaseAuth.getInstance().getCurrentUser().getUid()).set(map,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d("tag","Stored SuCKSESSFULL");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("tag","Stored FAILURER: "+e);
+
+                }
+            });
 
             Log.d("tag",Double.toString(latitude+longitude));
 

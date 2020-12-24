@@ -91,13 +91,13 @@ public class splash_screen extends AppCompatActivity {
 
                                     }
 
-                                }*/
-                                            /*notif=documentSnapshot.getBoolean(RECEIVE_NOTIFICATION);
+                                }
+                                            notif=documentSnapshot.getBoolean(RECEIVE_NOTIFICATION);
                                             orders=documentSnapshot.getBoolean(RECEIVE_ORDERS);
-                                            chat=documentSnapshot.getBoolean(RECEIVE_LIVE_CHAT);*/
+                                            chat=documentSnapshot.getBoolean(RECEIVE_LIVE_CHAT);
 
 
-                       /*     }
+                           }
 
                         }
                     })
@@ -144,30 +144,20 @@ public class splash_screen extends AppCompatActivity {
 
                             switch (FullName) {
                                 case "Patient": {
-
                                     startActivity(new Intent(splash_screen.this, dashboard.class));
                                     finish();
                                     break;
-
-
                                 }
                                 case "Laboratory": {
 
 
                                 }
                                 case "Pharmacy": {
-
-
                                     startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));
                                     finish();
                                     break;
-
-
                                 }
-
                             }
-
-
                         }
                     }
                     else {

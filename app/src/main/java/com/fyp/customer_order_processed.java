@@ -40,6 +40,7 @@ public class customer_order_processed extends AppCompatActivity {
     MaterialButton cancel_button,live_chat_button,accept_button;
     FirebaseAuth mAuth;
     String s,PID;
+    boolean is_Accepted;
     TextView med,price;
 
 
@@ -52,6 +53,12 @@ public class customer_order_processed extends AppCompatActivity {
     live_chat_button=findViewById(R.id.live_chat);
     accept_button=findViewById(R.id.accept_order);
     inflate_menu();
+    if (is_Accepted){
+
+        accept_button.setVisibility(View.GONE);
+        live_chat_button.setVisibility(View.VISIBLE);
+
+    }
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,33 +69,12 @@ public class customer_order_processed extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Continue with delete operation
                                 startActivity(new Intent(customer_order_processed.this, dashboard.class));
-
                             }
                         })
-
-                        // A null listener allows the button to dismiss the dialog and take no further action.
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(R.drawable.logo_splash)
                         .show();
 
-                /*
-
-                new MaterialDialog.Builder(this)
-                        .title(R.string.ok)
-                        .content(R.string.are_you_finish_app)
-                        .positiveText(R.string.finish)
-                        .negativeText(R.string.cancel)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Intent intent = new Intent(getApplicationContext(), StartActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                intent.putExtra("EXIT", true);
-                                startActivity(intent);
-                                finish();
-                            }
-                        })
-                        .show();*/
             }});
 
         live_chat_button.setOnClickListener(new View.OnClickListener() {
@@ -182,41 +168,88 @@ public class customer_order_processed extends AppCompatActivity {
         count=0;
         mAuth=FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
-
-        db.collection("processed_unaccepted_order").document(mAuth.getCurrentUser().getEmail())
-                .get(Source.SERVER)
+        db.collection("users")
+                .document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                count = Integer.parseInt(Objects.requireNonNull(documentSnapshot.getString(customer_custom_request.ORDER_COUNT_KEY)));
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        is_Accepted = documentSnapshot.getBoolean("is_accepted");
+                        if (!is_Accepted) {
+                            db.collection("processed_unaccepted_order").document(mAuth.getCurrentUser().getEmail())
+                                    .get(Source.SERVER)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            count = Integer.parseInt(Objects.requireNonNull(documentSnapshot.getString(customer_custom_request.ORDER_COUNT_KEY)));
 
-                for (int i = 1; i <= count; i++) {
+                                            for (int i = 1; i <= count; i++) {
 
-                    LayoutInflater l = LayoutInflater.from(customer_order_processed.this);
-                    View v = l.inflate(R.layout.med_processed_price_resource, null);
-                    LinearLayout parent = findViewById(R.id.parent_inflater);
-                    parent.addView(v);
-                    med=findViewById(R.id.med);
-                    med.setId(Integer.parseInt(MED_ID+i));
-                    s=documentSnapshot.getString(customer_custom_request.MED_KEY+i)
-                            +" "+documentSnapshot.getString(customer_custom_request.TYPE_KEY+i)
-                            +" "+documentSnapshot.getString(customer_custom_request.QTY_KEY+i);
-                    med.setText(s);
-                    price=findViewById(R.id.price);
-                    price.setId(Integer.parseInt(PRICE_ID+i));
-                    s="Price: "+documentSnapshot.getString(pharmacy_price_order.PRICE_KEY+i);
-                    price.setText(s);
+                                                LayoutInflater l = LayoutInflater.from(customer_order_processed.this);
+                                                View v = l.inflate(R.layout.med_processed_price_resource, null);
+                                                LinearLayout parent = findViewById(R.id.parent_inflater);
+                                                parent.addView(v);
+                                                med = findViewById(R.id.med);
+                                                med.setId(Integer.parseInt(MED_ID + i));
+                                                s = documentSnapshot.getString(customer_custom_request.MED_KEY + i)
+                                                        + " " + documentSnapshot.getString(customer_custom_request.TYPE_KEY + i)
+                                                        + " " + documentSnapshot.getString(customer_custom_request.QTY_KEY + i);
+                                                med.setText(s);
+                                                price = findViewById(R.id.price);
+                                                price.setId(Integer.parseInt(PRICE_ID + i));
+                                                s = "Price: " + documentSnapshot.getString(pharmacy_price_order.PRICE_KEY + i);
+                                                price.setText(s);
 
-                }
-                med=findViewById(R.id.total);
-                med.setText(documentSnapshot.getString(pharmacy_price_order.TOTAL_KEY));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                                            }
+                                            med = findViewById(R.id.total);
+                                            med.setText(documentSnapshot.getString(pharmacy_price_order.TOTAL_KEY));
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
 
-            }
-        });
+                                }
+                            });
+                        } else {
+                            db.collection("processed_accepted_order").document(mAuth.getCurrentUser().getEmail())
+                                    .get(Source.SERVER)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            count = Integer.parseInt(Objects.requireNonNull(documentSnapshot.getString(customer_custom_request.ORDER_COUNT_KEY)));
+
+                                            for (int i = 1; i <= count; i++) {
+
+                                                LayoutInflater l = LayoutInflater.from(customer_order_processed.this);
+                                                View v = l.inflate(R.layout.med_processed_price_resource, null);
+                                                LinearLayout parent = findViewById(R.id.parent_inflater);
+                                                parent.addView(v);
+                                                med = findViewById(R.id.med);
+                                                med.setId(Integer.parseInt(MED_ID + i));
+                                                s = documentSnapshot.getString(customer_custom_request.MED_KEY + i)
+                                                        + " " + documentSnapshot.getString(customer_custom_request.TYPE_KEY + i)
+                                                        + " " + documentSnapshot.getString(customer_custom_request.QTY_KEY + i);
+                                                med.setText(s);
+                                                price = findViewById(R.id.price);
+                                                price.setId(Integer.parseInt(PRICE_ID + i));
+                                                s = "Price: " + documentSnapshot.getString(pharmacy_price_order.PRICE_KEY + i);
+                                                price.setText(s);
+
+                                            }
+                                            med = findViewById(R.id.total);
+                                            med.setText(documentSnapshot.getString(pharmacy_price_order.TOTAL_KEY));
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                        }
+                    }
+
+
+                });
+
 
 
         }

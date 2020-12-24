@@ -88,7 +88,6 @@ public class live_chat extends AppCompatActivity {
                             a++;
                             chatMessage.setMessage(chatView.getTypedMessage());
                             chatMessage.setType(ChatMessage.Type.SENT);
-                            //chatView.addMessage(chatMessage);
                             chatView.getInputEditText().setText("");
                             db=FirebaseFirestore.getInstance();
                             Map<String,Object> map = new HashMap<>();
@@ -222,7 +221,7 @@ public class live_chat extends AppCompatActivity {
         sendNotification=true;
         SharedPreferences sharedPreferences =getSharedPreferences("LIVE_CHAT_DETAIL",MODE_PRIVATE);
         SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putBoolean("sendNotification",sendNotification);
+        editor.putBoolean("IS_ACTIVE",sendNotification);
         editor.commit();
 
     }

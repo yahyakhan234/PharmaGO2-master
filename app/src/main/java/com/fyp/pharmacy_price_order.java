@@ -56,12 +56,7 @@ public class pharmacy_price_order extends AppCompatActivity {
         Log.d("extra","no??:"+ s);
         //context=this;
 
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-
         db=FirebaseFirestore.getInstance();
-        db.setFirestoreSettings(settings);
         db.collection("orders").document(s).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
 import java.util.Calendar;
@@ -202,15 +203,20 @@ public class customer_custom_request extends AppCompatActivity {
                             String s=documentSnapshot.getString("latest_order_number");
                             s=Integer.toString(Integer.parseInt(s)+1);
                             medicine_order.put(ORDERID_KEY,s);
-                            startActivity(new Intent(customer_custom_request.this, searching_deliverer.class));
                             db.collection("orders").document(email)
                                     .set(medicine_order).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     GenerateNotif g=new GenerateNotif();
                                     g.sendNotificationToAllUsers();
-
+                                    Map<String,Object> setorder=new HashMap<>();
+                                    setorder.put("is_ordering",true);
+                                  //  setorder.put("progress",searching_deliverer.class);
+                                    setorder.put("is_accepted",false);
+                                    db.collection("users").document(email).set(setorder,SetOptions.merge());
                                     Log.d("tag", "Added Successfully");
+
+                                    startActivity(new Intent(customer_custom_request.this, searching_deliverer.class));
                                 }
                             })
                                     .addOnFailureListener(new OnFailureListener() {

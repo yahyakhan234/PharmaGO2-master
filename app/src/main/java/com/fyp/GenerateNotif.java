@@ -98,6 +98,21 @@ public class GenerateNotif {
             }
         });
     }
+    public void sendNotificationToSinglePharmacist(String UID){
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+        usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Prepare Order","Your bid has been accepted. Please prepare order, Tap to view");
+            }
+        });
+    }
+
     public void sendNewMessageNotification(String UID){
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);

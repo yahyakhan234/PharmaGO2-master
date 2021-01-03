@@ -1,18 +1,36 @@
 package com.fyp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
+
+import java.util.Objects;
 
 public class pharmacy_order_in_progress extends AppCompatActivity {
+    public static final String MED_ID="100";
+    public static final String PRICE_ID="101";
+    public static final String TAG="tag";
 
     MaterialButton share;
+    String emailExtra;
+    FirebaseFirestore db;
+    int count;
+    String s;
+    TextView med,price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +38,12 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
         setContentView(R.layout.activity_pharmacy_order_in_progress);
         share=findViewById(R.id.share_location);
         TextView tv=findViewById(R.id.timer_text);
+
         timeticker(tv);
+        db=FirebaseFirestore.getInstance();
+        emailExtra=getIntent().getStringExtra("email");
+        fillMedsMenu(emailExtra);
+
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,7 +61,7 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
 
     }
     public void timeticker (final TextView tv){
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(3600000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 tv.setText(""+ millisUntilFinished / 1000);
@@ -48,5 +71,42 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
                 tv.setText("Time Over!");
             }
         }.start();
+    }
+    void fillMedsMenu(String email){
+        db.collection("processed_accepted_order").document(email)
+                .get(Source.SERVER)
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        count = Integer.parseInt(Objects.requireNonNull(documentSnapshot.getString(customer_custom_request.ORDER_COUNT_KEY)));
+
+                        for (int i = 1; i <= count; i++) {
+
+                            LayoutInflater l = LayoutInflater.from(pharmacy_order_in_progress.this);
+                            View v = l.inflate(R.layout.med_processed_price_resource, null);
+                            LinearLayout parent = findViewById(R.id.parent_inflater);
+                            parent.addView(v);
+                            med = findViewById(R.id.med);
+                            med.setId(Integer.parseInt(MED_ID + i));
+                            s = documentSnapshot.getString(customer_custom_request.MED_KEY + i)
+                                    + " " + documentSnapshot.getString(customer_custom_request.TYPE_KEY + i)
+                                    + " " + documentSnapshot.getString(customer_custom_request.QTY_KEY + i);
+                            med.setText(s);
+                            price = findViewById(R.id.price);
+                            price.setId(Integer.parseInt(PRICE_ID + i));
+                            s = "Price: " + documentSnapshot.getString(pharmacy_price_order.PRICE_KEY + i);
+                            price.setText(s);
+
+                        }
+                        med = findViewById(R.id.total);
+                        med.setText(documentSnapshot.getString(pharmacy_price_order.TOTAL_KEY));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
     }
 }

@@ -173,6 +173,17 @@ public class GenerateNotif {
         });
     }
 
+    public void timeOverNotify(String PID){
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        usersRef.document(PID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Time Over",""+FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            }
+        });
+    }
 
     public void sendNotifications(String usertoken, String title, String message) {
             Data data = new Data(title, message);
@@ -184,12 +195,14 @@ public class GenerateNotif {
                     if (response.code() == 200) {
                         assert response.body() != null;
                         if (response.body().success != 1) {
+                            Log.d("ERROR","IM ");
                             Log.d("Failed","Notification Sending Failed");
                         }
                     }
                 }
                 @Override
                 public void onFailure(Call<MyResponse> call, Throwable t) {
+
                 }
             });
         }

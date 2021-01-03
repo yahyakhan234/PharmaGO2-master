@@ -14,7 +14,6 @@ public class lab_order_in_progress extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lab_order_in_progress);
-
         live_chat_button=findViewById(R.id.live_chat);
         live_chat_button.setOnClickListener(new View.OnClickListener() {
             @Override

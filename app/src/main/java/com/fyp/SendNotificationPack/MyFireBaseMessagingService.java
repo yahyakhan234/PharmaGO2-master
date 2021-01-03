@@ -1,4 +1,5 @@
 package com.fyp.SendNotificationPack;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,14 +13,27 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import com.fyp.Buy_Requests;
 import com.fyp.customer_order_processed;
 import com.fyp.live_chat;
 import com.fyp.live_chat_pharma;
+import com.fyp.timeRunnerService;
+import com.fyp.delivery_alarm_manager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.fyp.R;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
     String title,message;
     @Override
@@ -95,6 +109,36 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     private void acceptOrder(String title,String message) {
         // Builds your notification
         // Create an explicit intent for an Activity in your app
+       /* Intent serviceIntent = new Intent(this, timeRunnerService.class);
+        ContextCompat.startForegroundService(this, serviceIntent);*/
+
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent1 = new Intent(this, delivery_alarm_manager.class);
+        int random=new Random().nextInt(900)+100;
+        Map<String,Object> m=new HashMap<>();
+        m.put("order_complete_key",Integer.toString(random));
+        FirebaseFirestore.getInstance().collection("users")
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                .set(m,SetOptions.merge());
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 1, intent1, 0);
+        int time= (int) (System.currentTimeMillis()+60000);
+        Map<String,Object> map=new HashMap<>();
+        map.put("final_time",time);
+        FirebaseFirestore.getInstance().collection("processed_unaccepted_order")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .set(map, SetOptions.merge());
+        SharedPreferences sharedPreferences
+                = getSharedPreferences("order_time", MODE_PRIVATE);
+        SharedPreferences.Editor editPrefs;
+        editPrefs = sharedPreferences.edit();
+        editPrefs.putInt("time", time);
+        editPrefs.apply();
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent1);
+        Log.d("Alarm time","Alarm Set For: "+((time)/1000));
+
+
+
         Intent intent = new Intent(this, customer_order_processed.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);

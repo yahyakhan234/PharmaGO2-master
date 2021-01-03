@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +29,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import co.intentservice.chatui.models.ChatMessage;
@@ -37,11 +43,13 @@ public class customer_order_processed extends AppCompatActivity {
     public static final String PRICE_ID="101";
     public static final String TAG="tag";
     private FirebaseFirestore db;
-    MaterialButton cancel_button,live_chat_button,accept_button;
+    MaterialButton cancel_button,live_chat_button,accept_button,pharmacy_details_button;
     FirebaseAuth mAuth;
-    String s,PID;
+    String s,PID,tempo,setTime;
     boolean is_Accepted;
     TextView med,price;
+    int remainderTime;
+    CountDownTimer timer;
 
 
     int count;
@@ -52,6 +60,13 @@ public class customer_order_processed extends AppCompatActivity {
     cancel_button=findViewById(R.id.cancel_button);
     live_chat_button=findViewById(R.id.live_chat);
     accept_button=findViewById(R.id.accept_order);
+    pharmacy_details_button=findViewById(R.id.pharmay_details_button);
+    pharmacy_details_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startActivity(new Intent(customer_order_processed.this,pharmacy_details.class));
+        }
+    });
     inflate_menu();
     if (is_Accepted){
 
@@ -121,8 +136,13 @@ public class customer_order_processed extends AppCompatActivity {
                                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
                                                                             public void onSuccess(Void aVoid) {
+                                                                                Map<String, Object> m=new HashMap<>();
+                                                                                m.put("is_accepted",true);
+                                                                                db.collection("users")
+                                                                                        .document(Objects.requireNonNull(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()))
+                                                                                        .set(m,SetOptions.merge());
                                                                                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                                                new GenerateNotif().sendNotificationToSingleUser(PID);
+                                                                                new GenerateNotif().sendNotificationToSinglePharmacist(PID);
                                                                             }
                                                                         })
                                                                         .addOnFailureListener(new OnFailureListener() {
@@ -149,8 +169,9 @@ public class customer_order_processed extends AppCompatActivity {
                                 });
                                 accept_button.setVisibility(View.GONE);
                                 live_chat_button.setVisibility(View.VISIBLE);
-                                cancel_button.setEnabled(false);
-
+                                cancel_button.setVisibility(View.GONE);
+                                cancel_button=findViewById(R.id.cancel_button_disabled);
+                                cancel_button.setVisibility(View.VISIBLE);
 
                             }
                         })
@@ -164,12 +185,49 @@ public class customer_order_processed extends AppCompatActivity {
         });
 
     }
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences
+                = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+
+        SharedPreferences.Editor editPrefs;
+        editPrefs = sharedPreferences.edit();
+        editPrefs.putBoolean("is_viewing_timer", true);
+        editPrefs.apply();
+        final TextView timer_text_customer_delivery=findViewById(R.id.timer_text_customer_delivery);
+       SharedPreferences sp = getSharedPreferences("order_time", MODE_PRIVATE);
+       remainderTime= (int) (sp.getInt("time",0)-System.currentTimeMillis());
+       timer= new CountDownTimer(remainderTime, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                tempo=((millisUntilFinished/1000)/60)+":"+(millisUntilFinished/1000);
+                timer_text_customer_delivery.setText(tempo);
+            }
+            public void onFinish() {
+                tempo="Time Over!";
+                timer_text_customer_delivery.setText(tempo);
+
+            }
+        }.start();
+
+    }
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences sharedPreferences
+                = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+        SharedPreferences.Editor editPrefs;
+        editPrefs = sharedPreferences.edit();
+        editPrefs.putBoolean("is_viewing_timer", false);
+        editPrefs.apply();
+        timer.cancel();
+
+    }
     void inflate_menu(){
         count=0;
         mAuth=FirebaseAuth.getInstance();
         db=FirebaseFirestore.getInstance();
         db.collection("users")
-                .document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER)
+                .document(Objects.requireNonNull(Objects.requireNonNull(mAuth.getCurrentUser()).getEmail())).get(Source.SERVER)
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -210,6 +268,11 @@ public class customer_order_processed extends AppCompatActivity {
                                 }
                             });
                         } else {
+                            accept_button.setVisibility(View.GONE);
+                            live_chat_button.setVisibility(View.VISIBLE);
+                            cancel_button.setVisibility(View.GONE);
+                            cancel_button=findViewById(R.id.cancel_button_disabled);
+                            cancel_button.setVisibility(View.VISIBLE);
                             db.collection("processed_accepted_order").document(mAuth.getCurrentUser().getEmail())
                                     .get(Source.SERVER)
                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

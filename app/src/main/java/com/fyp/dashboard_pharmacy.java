@@ -210,6 +210,11 @@ public class dashboard_pharmacy extends AppCompatActivity {
                 ProgressBar progressBar=findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.GONE);
             }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
         });
 
 

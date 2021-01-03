@@ -14,6 +14,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -34,8 +35,9 @@ public class MyFirebaseIdService extends FirebaseMessagingService {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser firebaseUser=FirebaseAuth.getInstance().getCurrentUser();
         Token token1= new Token(refreshToken);
+        assert firebaseUser != null;
         db.collection("pharma_users_online").document(firebaseUser.getUid())
-                .set(new HashMap<String, Object>().put("token",refreshToken), SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                .set(Objects.requireNonNull(new HashMap<String, Object>().put("token", refreshToken)), SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("tag", "Added Successfully");

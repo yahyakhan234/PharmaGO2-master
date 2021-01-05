@@ -115,12 +115,6 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent1 = new Intent(this, delivery_alarm_manager.class);
-        int random=new Random().nextInt(900)+100;
-        Map<String,Object> m=new HashMap<>();
-        m.put("order_complete_key",Integer.toString(random));
-        FirebaseFirestore.getInstance().collection("users")
-                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
-                .set(m,SetOptions.merge());
         PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 1, intent1, 0);
         int time= (int) (System.currentTimeMillis()+60000);
         Map<String,Object> map=new HashMap<>();

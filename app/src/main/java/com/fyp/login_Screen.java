@@ -47,7 +47,6 @@ public class login_Screen extends AppCompatActivity {
     @Override
            protected void onCreate(Bundle savedInstanceState) {
         Log.d("onc check", "first on create");
-        Toast.makeText(this, "test",Toast.LENGTH_LONG).show();
 
 //            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 //                    .detectDiskReads()

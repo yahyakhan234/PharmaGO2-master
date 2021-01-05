@@ -9,12 +9,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,13 +45,18 @@ public class customer_order_processed extends AppCompatActivity {
     public static final String MED_ID="100";
     public static final String PRICE_ID="101";
     public static final String TAG="tag";
+    public static final String ID_KEY="id";
+    public static final String COUNT_KEY="count";
+    public static final String NAME_KEY="name";
     private FirebaseFirestore db;
-    MaterialButton cancel_button,live_chat_button,accept_button,pharmacy_details_button;
+    MaterialButton cancel_button,live_chat_button,accept_button,pharmacy_details_button,complete_order_button;
+    LinearLayout complete_order_view;
     FirebaseAuth mAuth;
-    String s,PID,tempo,setTime;
+    String s,PID,tempo,oid,pemail;
     boolean is_Accepted;
     TextView med,price;
     int remainderTime;
+    DocumentReference fromPath,toPath;
     CountDownTimer timer;
 
 
@@ -61,6 +69,8 @@ public class customer_order_processed extends AppCompatActivity {
     live_chat_button=findViewById(R.id.live_chat);
     accept_button=findViewById(R.id.accept_order);
     pharmacy_details_button=findViewById(R.id.pharmay_details_button);
+    complete_order_button=findViewById(R.id.complete_order);
+    complete_order_view=findViewById(R.id.complete_order_view);
     pharmacy_details_button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -69,11 +79,107 @@ public class customer_order_processed extends AppCompatActivity {
     });
     inflate_menu();
     if (is_Accepted){
-
         accept_button.setVisibility(View.GONE);
         live_chat_button.setVisibility(View.VISIBLE);
+        complete_order_button.setVisibility(View.VISIBLE);
 
     }
+
+    complete_order_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new AlertDialog.Builder(customer_order_processed.this)
+                    .setTitle("Mark as Complete")
+                    .setMessage("Are you sure you want to mark this order as complete? You will not be able to undo this operation")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Continue with mark as complete operation
+                            db=FirebaseFirestore.getInstance();
+                            s=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+                            fromPath=db.collection("processed_accepted_order").document(s);
+                            fromPath.get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                oid=documentSnapshot.getString("orderID");
+                                pemail=documentSnapshot.getString("pemail");
+                                toPath=db.collection("orders_completed").document(oid);
+                                PID=documentSnapshot.getString("PID");
+                                    fromPath.get(Source.SERVER).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                final DocumentSnapshot document = task.getResult();
+                                                if (document != null) {
+                                                    toPath.set(document.getData())
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                    fromPath.delete()
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void aVoid) {
+                                                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                                                    db.collection("pharma_orders").document(PID)
+                                                                                            .get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                            Map<String,Object> copyMap=new HashMap<>();
+                                                                                            int copyCount=1;
+                                                                                            if(!documentSnapshot.getString("count").equalsIgnoreCase("0")) {
+                                                                                                for (int i = 1; i <= Integer.parseInt(documentSnapshot.getString("count")); i++) {
+                                                                                                    if (documentSnapshot.getString("order" + i).equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+                                                                                                        continue;
+                                                                                                    }
+                                                                                                    copyMap.put("order" + copyCount, documentSnapshot.getString("order" + i));
+                                                                                                    copyMap.put("name" + copyCount, documentSnapshot.getString("order" + i));
+                                                                                                    copyCount++;
+                                                                                                }
+                                                                                                int i=Integer.parseInt(documentSnapshot.getString("count"));
+                                                                                                i--;
+                                                                                                copyMap.put("count",Integer.toString(i));
+                                                                                                db.collection("pharma_orders").document(PID).set(copyMap);
+                                                                                                }}});
+                                                                                    new GenerateNotif().sendNotificationToSinglePharmacist(PID);
+                                                                                }
+                                                                            })
+                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Log.w(TAG, "Error deleting document", e);
+                                                                                }
+                                                                            });
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w(TAG, "Error writing document", e);
+                                                                }
+                                                            });
+                                                } else {
+                                                    Log.d(TAG, "No such document");
+                                                }
+                                            } else {
+                                                Log.d(TAG, "get failed with ", task.getException());
+                                            }
+                                        }
+                                    });
+
+
+                                }
+                            });
+
+
+                           // startActivity(new Intent(customer_order_processed.this, dashboard.class));
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(R.drawable.logo_splash)
+                    .show();
+        }
+    });
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,8 +218,8 @@ public class customer_order_processed extends AppCompatActivity {
 
                                 s=FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
-                                final DocumentReference fromPath=db.collection("processed_unaccepted_order").document(s);
-                                final DocumentReference toPath=db.collection("processed_accepted_order").document(s);
+                                  fromPath=db.collection("processed_unaccepted_order").document(s);
+                                  toPath=db.collection("processed_accepted_order").document(s);
 
                                 fromPath.get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                     @Override
@@ -232,6 +338,10 @@ public class customer_order_processed extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         is_Accepted = documentSnapshot.getBoolean("is_accepted");
+                        if (documentSnapshot.getBoolean("complete_requested"))
+                        {
+                            complete_order_view.setVisibility(View.VISIBLE);
+                        }
                         if (!is_Accepted) {
                             db.collection("processed_unaccepted_order").document(mAuth.getCurrentUser().getEmail())
                                     .get(Source.SERVER)

@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".pharmacy_details"></activity>
+        <activity android:name=".order_completed"></activity>
+        <activity android:name=".pharmacy_details" />
         <activity android:name=".live_chat_pharma" />
         <activity android:name=".nointernet" />
         <!--
@@ -75,6 +76,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".SendNotificationPack.MyFireBaseMessagingService"
             android:enabled="true"
@@ -91,7 +93,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".timeRunnerService" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

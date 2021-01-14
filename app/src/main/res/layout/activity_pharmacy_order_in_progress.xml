@@ -145,6 +145,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/complete_order_button"
             style="@android:style/Widget.Material.Button.Colored"
             android:layout_alignParentLeft="true"
             android:layout_margin="20dp"
@@ -157,11 +158,12 @@
         <com.google.android.material.button.MaterialButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/live_chat_button"
             style="@android:style/Widget.Material.Button.Colored"
             android:layout_alignParentRight="true"
             android:layout_margin="20dp"
             android:padding="19dp"
-            android:text="Chat Session"
+            android:text="Live Chat"
             android:textSize="15sp"
             android:textColor="#fff"
             app:backgroundTint="#00a599"

@@ -1,5 +1,6 @@
 package com.fyp;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 
 public class delivery_alarm_manager extends BroadcastReceiver {
     FirebaseFirestore db;
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("Alarm time","Time Over");
@@ -28,15 +30,20 @@ public class delivery_alarm_manager extends BroadcastReceiver {
         m.put("in_time",false);
         db.collection("users")
                 .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()
-                        .getEmail())).set(m, SetOptions.merge());
-       db.collection("processed_accepted_order")
-               .document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get(Source.SERVER)
-               .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                   @Override
-                   public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    new GenerateNotif().timeOverNotify(documentSnapshot.getString("PID"));
-                   }
-               });
+                        .getEmail())).set(m, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                db.collection("processed_accepted_order")
+                        .document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get(Source.SERVER)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                new GenerateNotif().timeOverNotify(documentSnapshot.getString("PID"));
+                            }
+                        });
+
+            }
+        });
 
 
 

@@ -80,101 +80,6 @@ public class customer_custom_request extends AppCompatActivity {
         AutoCompleteTextView editTextFilledExposedDropdown =
                 findViewById(Integer.parseInt(MENU_ID+counter));
         editTextFilledExposedDropdown.setAdapter(adapter);
-
-      /*  final TextInputLayout med[]=new TextInputLayout[5];
-        String medname[]=new String[5];
-        final View[] vi=new View[5];
-        med[0]=findViewById(R.id.med1);
-        med[1]=findViewById(R.id.med2);
-        med[2]=findViewById(R.id.med3);
-        med[3]=findViewById(R.id.med4);
-        med[4]=findViewById(R.id.med5);
-
-        vi[0]= findViewById(R.id.med1);
-        vi[1]= findViewById(R.id.med2);
-        vi[2]= findViewById(R.id.med3);
-        vi[3]= findViewById(R.id.med4);
-        vi[4]= findViewById(R.id.med5);
-
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/med2"
-            android:hint="Medicine 2"
-            android:textColor="#000"
-            app:boxStrokeColor="@color/black"
-            android:textColorHint="#000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/med3"
-            android:visibility="gone"
-            android:hint="Medicine 3"
-            android:textColor="#000"
-            app:boxStrokeColor="@color/black"
-            android:textColorHint="#000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/med4"
-            android:visibility="gone"
-
-            android:hint="Medicine 4"
-            android:textColor="#000"
-            app:boxStrokeColor="@color/black"
-            android:textColorHint="#000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/med5"
-            android:visibility="gone"
-
-            android:hint="Medicine 5"
-            android:textColor="#000"
-            app:boxStrokeColor="@color/black"
-            android:textColorHint="#000"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
-
-        */
         final Map<String, Object> medicine_order = new HashMap<>();
 
         proceed.setOnClickListener(new View.OnClickListener() {
@@ -182,13 +87,21 @@ public class customer_custom_request extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL",MODE_PRIVATE);
-                    items=findViewById(Integer.parseInt(MED_ID+counter));
-                    medicine_order.put((MED_KEY+counter),items.getEditText().getText().toString());
-                    items=findViewById(Integer.parseInt(QTY_ID+counter));
-                    medicine_order.put((QTY_KEY+counter),items.getEditText().getText().toString());
-                    items=findViewById(Integer.parseInt(TYPE_ID+counter));
-                    medicine_order.put(TYPE_KEY+counter,items.getEditText().getText().toString());
+                   for (int i=1;i<=counter;i++) {
+                       items = findViewById(Integer.parseInt(MED_ID + i));
+                       medicine_order.put((MED_KEY + i), items.getEditText().getText().toString());
+
+                       items = findViewById(Integer.parseInt(QTY_ID + i));
+
+                       medicine_order.put((QTY_KEY + i), items.getEditText().getText().toString());
+
+                       items = findViewById(Integer.parseInt(TYPE_ID + i));
+
+                       medicine_order.put(TYPE_KEY+i, items.getEditText().getText().toString());
+                   }
+
                     medicine_order.put(UID_KEY,mAuth.getCurrentUser().getUid());
+                    medicine_order.put("uemail",mAuth.getCurrentUser().getEmail());
                     medicine_order.put(FULL_NAME_KEY,sharedPreferences.getString("NAME",""));
                     medicine_order.put(ORDER_COUNT_KEY,Integer.toString(counter));
                 @SuppressLint("SimpleDateFormat")
@@ -240,12 +153,6 @@ public class customer_custom_request extends AppCompatActivity {
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                items=findViewById(Integer.parseInt(MED_ID+counter));
-                medicine_order.put((MED_KEY+counter),items.getEditText().getText().toString());
-                items=findViewById(Integer.parseInt(QTY_ID+counter));
-                medicine_order.put((QTY_KEY+counter),items.getEditText().getText().toString());
-                items=findViewById(Integer.parseInt(TYPE_ID+counter));
-                medicine_order.put(TYPE_KEY+counter,items.getEditText().getText().toString());
                 counter++;
                 addNewItemToView(counter);
                 /*

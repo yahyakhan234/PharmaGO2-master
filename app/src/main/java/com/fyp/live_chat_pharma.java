@@ -36,14 +36,16 @@ public class live_chat_pharma extends AppCompatActivity {
     private int updateCount;
     private boolean sendNotification;
     private static final String MESSAGE_KEY="message";
+    String liveChatID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updateCount=Count=1;
         setContentView(R.layout.activity_live_chat_pharma);
+        liveChatID=getIntent().getStringExtra("id");
         SendButton=findViewById(R.id.send_message);
-        final ChatMessage chatMessage=new ChatMessage("Hello",00, ChatMessage.Type.RECEIVED);
-        chatMessage.setMessage("Hello");
+        final ChatMessage chatMessage=new ChatMessage("",00, ChatMessage.Type.RECEIVED);
+        chatMessage.setMessage("Start Of Conversation");
         chatMessage.setType(ChatMessage.Type.RECEIVED);
         final ChatView chatView = (ChatView) findViewById(R.id.chat_view);
         chatView.addMessage(chatMessage);
@@ -58,7 +60,7 @@ public class live_chat_pharma extends AppCompatActivity {
                 message.put("type","pharma");
                 map.put("message"+3,message);
                 db= FirebaseFirestore.getInstance();
-                db.collection("live_chat").document("LC101").set(map, SetOptions.merge())
+                db.collection("live_chat").document(liveChatID).set(map, SetOptions.merge())
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -78,7 +80,7 @@ public class live_chat_pharma extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(!chatView.getTypedMessage().isEmpty()){
-                    db.collection("live_chat").document("LC101").get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    db.collection("live_chat").document(liveChatID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             a=Integer.parseInt(documentSnapshot.getString("count"));
@@ -94,9 +96,9 @@ public class live_chat_pharma extends AppCompatActivity {
                             message.put("type","pharma");
                             map.put("message"+a,message);
                             map.put("count",Integer.toString(a));
-                            db.collection("live_chat").document("LC101").set(map,SetOptions.merge());
+                            db.collection("live_chat").document(liveChatID).set(map,SetOptions.merge());
                             GenerateNotif generateNotif=new GenerateNotif();
-                            generateNotif.sendNewMessageNotification(documentSnapshot.getString("UID"));
+                            generateNotif.sendNewMessageNotification(documentSnapshot.getString("UID"),liveChatID);
                         }
                     });
                     //Make count dynamic, setonchangelistner in OnResume()
@@ -112,7 +114,7 @@ public class live_chat_pharma extends AppCompatActivity {
         db=FirebaseFirestore.getInstance();
 
         db.collection("live_chat")
-                .document("LC101")
+                .document(liveChatID)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {

@@ -1,8 +1,10 @@
 package com.fyp;
-
+import com.fyp.classes.users_collection;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,8 +18,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class pharmacy_order_in_progress extends AppCompatActivity {
@@ -25,7 +30,8 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
     public static final String PRICE_ID="101";
     public static final String TAG="tag";
 
-    MaterialButton share;
+    MaterialButton share,liveChatButton,completeOrderButton;
+    private String liveChatID,UID;
     String emailExtra;
     FirebaseFirestore db;
     int count;
@@ -38,12 +44,48 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
         setContentView(R.layout.activity_pharmacy_order_in_progress);
         share=findViewById(R.id.share_location);
         TextView tv=findViewById(R.id.timer_text);
+        liveChatButton=findViewById(R.id.live_chat_button);
+        completeOrderButton=findViewById(R.id.complete_order_button);
 
         timeticker(tv);
         db=FirebaseFirestore.getInstance();
         emailExtra=getIntent().getStringExtra("email");
         fillMedsMenu(emailExtra);
+        completeOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(pharmacy_order_in_progress.this)
+                        .setTitle("Mark Order As complete")
+                        .setMessage("Complete order request will be generated, and user will be prompted to mark order as complete, Continue?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
+                                Map<String,Object> map=new HashMap<>();
+                                map.put(users_collection.COMPLETE_REQUESTED,true);
+                                db.collection("users").document(emailExtra).set(map, SetOptions.merge())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                new GenerateNotif().requestCompleteFromUser(UID);
+                                            }
+                                        });
+
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no,null)
+                        .setIcon(R.drawable.location_icon)
+                        .show();
+
+            }
+        });
+        liveChatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(pharmacy_order_in_progress.this,
+                       live_chat_pharma.class).putExtra("id",liveChatID));
+            }
+        });
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +140,8 @@ public class pharmacy_order_in_progress extends AppCompatActivity {
                             price.setText(s);
 
                         }
+                        UID=documentSnapshot.getString("UID");
+                        liveChatID="LC"+documentSnapshot.getString(customer_custom_request.ORDERID_KEY);
                         med = findViewById(R.id.total);
                         med.setText(documentSnapshot.getString(pharmacy_price_order.TOTAL_KEY));
                     }

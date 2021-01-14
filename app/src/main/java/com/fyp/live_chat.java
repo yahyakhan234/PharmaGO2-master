@@ -35,6 +35,7 @@ public class live_chat extends AppCompatActivity {
     private String m1,m2,lastmessage;
     private int Count=1,pCount,a;
     private MaterialButton SendButton;
+    private String liveChatID;
     private int updateCount;
     private boolean sendNotification;
 
@@ -44,9 +45,10 @@ public class live_chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         updateCount=Count=1;
         setContentView(R.layout.activity_live_chat);
+        liveChatID=getIntent().getStringExtra("id");
         SendButton=findViewById(R.id.send_message);
-        final ChatMessage chatMessage=new ChatMessage("Hello",00, ChatMessage.Type.RECEIVED);
-        chatMessage.setMessage("Hello");
+        final ChatMessage chatMessage=new ChatMessage("Start Of Conversation",00, ChatMessage.Type.RECEIVED);
+        chatMessage.setMessage("Start Of Conversation");
         chatMessage.setType(ChatMessage.Type.RECEIVED);
         final ChatView chatView = (ChatView) findViewById(R.id.chat_view);
         chatView.addMessage(chatMessage);
@@ -61,7 +63,7 @@ public class live_chat extends AppCompatActivity {
                 message.put("type","user");
                 map.put("message"+3,message);
                 db=FirebaseFirestore.getInstance();
-                db.collection("live_chat").document("LC101").set(map,SetOptions.merge())
+                db.collection("live_chat").document(liveChatID).set(map,SetOptions.merge())
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
@@ -81,7 +83,7 @@ public class live_chat extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(!chatView.getTypedMessage().isEmpty()){
-                    db.collection("live_chat").document("LC101").get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    db.collection("live_chat").document(liveChatID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             a=Integer.parseInt(documentSnapshot.getString("count"));
@@ -96,9 +98,9 @@ public class live_chat extends AppCompatActivity {
                             message.put("type","user");
                             map.put("message"+a,message);
                             map.put("count",Integer.toString(a));
-                            db.collection("live_chat").document("LC101").set(map,SetOptions.merge());
+                            db.collection("live_chat").document(liveChatID).set(map,SetOptions.merge());
                             GenerateNotif generateNotif=new GenerateNotif();
-                            generateNotif.sendNewMessageNotification(documentSnapshot.getString("PID"));
+                            generateNotif.sendNewMessageNotification(documentSnapshot.getString("PID"),liveChatID);
                         }
                     });
                     //Make count dynamic, setonchangelistner in OnResume()
@@ -119,7 +121,7 @@ public class live_chat extends AppCompatActivity {
         db=FirebaseFirestore.getInstance();
 
             db.collection("live_chat")
-                    .document("LC101")
+                    .document(liveChatID)
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -135,7 +137,6 @@ public class live_chat extends AppCompatActivity {
                             m2=message.get("type").toString();
                             if (m1.equalsIgnoreCase(lastmessage)){
                                 continue;
-
                             }
                             ChatMessage chatMessage;
                             switch (m2){
@@ -168,7 +169,7 @@ public class live_chat extends AppCompatActivity {
         editor.putBoolean("IS_ACTIVE",sendNotification);
         editor.commit();
     }
-    void setChat(){
+   /* void setChat(){
 
         db=FirebaseFirestore.getInstance();
 
@@ -214,7 +215,7 @@ public class live_chat extends AppCompatActivity {
                 editor.commit();
                     }
                 });
-    }
+    }*/
     @Override
     protected void onPause() {
         super.onPause();

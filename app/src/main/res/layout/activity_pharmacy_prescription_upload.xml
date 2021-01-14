@@ -40,23 +40,26 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="600dp"
         android:background="#000">
 
-        <ImageView
-            android:id="@+id/imageView1"
+       <com.jsibbold.zoomage.ZoomageView
+        android:id="@+id/presc_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/pending_order"
+        />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/prescription_image"
-            android:scaleType="fitXY"
-
-            android:contentDescription="Uploaded Prescription"
-            />
+            android:indeterminate="true"/>
 
     </RelativeLayout>
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="@drawable/customborder"
 
@@ -66,111 +69,83 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             >
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/med1"
-                android:hint="Medicine 1"
-                android:textColor="#000"
-                app:boxStrokeColor="@color/black"
-                android:textColorHint="#000"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
+                android:orientation="vertical">
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/med2"
-                android:hint="Medicine 2"
-                android:textColor="#000"
-                app:boxStrokeColor="@color/black"
-                android:textColorHint="#000"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/med3"
-                android:visibility="gone"
-                android:hint="Medicine 3"
-                android:textColor="#000"
-                app:boxStrokeColor="@color/black"
-                android:textColorHint="#000"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/med4"
-                android:visibility="gone"
-
-                android:hint="Medicine 4"
-                android:textColor="#000"
-                app:boxStrokeColor="@color/black"
-                android:textColorHint="#000"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/med5"
-                android:visibility="gone"
-
-                android:hint="Medicine 5"
-                android:textColor="#000"
-                app:boxStrokeColor="@color/black"
-                android:textColorHint="#000"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:padding="10dp">
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/addItem"
-                    android:text="Add Another Item"
+                    android:text="Calculate"
+                    android:padding="10dp"
+                    android:id="@+id/calculate_bill"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/primaryTheme"
-                    android:layout_alignParentRight="true"
-                    />
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerInParent="true"/>
 
-            </RelativeLayout>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Total:"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="20sp"
+
+                    />
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text=""
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/total"
+                    />
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/med_view_inflater"
+                    >
+
+                </LinearLayout>
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/addItem"
+                        android:text="Add Another Item"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/primaryTheme"
+                        android:layout_alignParentRight="true"
+                        />
+
+                </RelativeLayout>
             </LinearLayout>
-            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/proceed"
+                    android:id="@+id/search_deliverer"
                     android:layout_margin="10dp"
                     android:textSize="15sp"
                     android:text="proceed"
@@ -178,20 +153,25 @@
                     android:backgroundTint="@color/primaryTheme"
                     android:layout_alignParentLeft="true"
                     />
-                android:layout_height="wrap_content">
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/deny"
                     android:layout_margin="10dp"
                     android:textSize="15sp"
-                    android:text="Deny Order"
+                    android:text="Back To Home"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/primaryTheme"
                     android:layout_alignParentRight="true"
                     />
 
             </RelativeLayout>
+            <fragment
+                android:id="@+id/locCus"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="378dp" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

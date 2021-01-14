@@ -42,6 +42,7 @@ public class pharmacy_price_order extends AppCompatActivity {
     private FirebaseFirestore db;
     int count,bill;
     String UID;
+    private String orderID;
 
     Context context;
 
@@ -118,6 +119,7 @@ public class pharmacy_price_order extends AppCompatActivity {
                 s=getIntent().getStringExtra("Email");
                 medicine_order.put(TOTAL_KEY,Integer.toString(bill));
                 medicine_order.put("PID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                medicine_order.put("pemail",FirebaseAuth.getInstance().getCurrentUser().getEmail());
                 db.collection("orders")
                         .document(s)
                         .set(medicine_order, SetOptions.merge())
@@ -141,6 +143,7 @@ public class pharmacy_price_order extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
+                            orderID=document.getString(customer_custom_request.ORDERID_KEY);
                             if (document != null) {
                                 toPath.set(document.getData())
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -152,6 +155,14 @@ public class pharmacy_price_order extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
                                                                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
+                                                                Map<String,Object> map=new HashMap<>();
+                                                                map.put("PID",FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                                map.put("UID",UID);
+                                                                map.put("count","0");
+                                                                db.collection("live_chat")
+                                                                        .document("LC"+orderID)
+                                                                        .set(map);
                                                                new GenerateNotif().sendNotificationToSingleUser(UID);
                                                             }
                                                         })

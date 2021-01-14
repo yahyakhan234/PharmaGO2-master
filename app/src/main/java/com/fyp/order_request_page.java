@@ -101,7 +101,5 @@ public class order_request_page extends AppCompatActivity
         mMap.addMarker(new MarkerOptions().position(sydney).title("Customer Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-
-
     }
 }

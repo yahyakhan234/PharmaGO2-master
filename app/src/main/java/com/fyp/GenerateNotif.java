@@ -32,6 +32,7 @@ import retrofit2.Response;
 import static android.content.Context.MODE_PRIVATE;
 
 public class GenerateNotif {
+    private String live;
     private APIService apiService;
     private LinkedList<online_user> onlineUsers=new LinkedList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -100,9 +101,6 @@ public class GenerateNotif {
     }
     public void sendNotificationToSinglePharmacist(String UID){
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-
-
-
         usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -113,15 +111,16 @@ public class GenerateNotif {
         });
     }
 
-    public void sendNewMessageNotification(String UID){
+    public void sendNewMessageNotification(String UID, String liveChatID){
 
+         live=liveChatID;
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 String s=documentSnapshot.getString("token");
                 Log.d("Notif","Notification Sending");
-                sendNotifications(s,"live chat","Yo nigger");
+                sendNotifications(s,"live chat", live);
             }
         });
     }
@@ -206,6 +205,30 @@ public class GenerateNotif {
                 }
             });
         }
+    public void orderCompleted(String PID){
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        usersRef.document(PID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Order Completed","Congratulations! Your Order has completed.You can view your completed orders in completed orders tab, Tap to view");
+            }
+        });
+
     }
+    public void requestCompleteFromUser(String UID) {
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Complete Request","Your order has been delivered. Please mark order as complete, Tap to view");
+            }
+        });
+    }
+}
 
 

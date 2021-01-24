@@ -13,15 +13,18 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fyp.SendNotificationPack.Token;
+import com.fyp.classes.viewComplains;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,11 +45,15 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fyp.dashboard_pharmacy.BUTTONID;
+import static com.fyp.dashboard_pharmacy.EMAILID;
+import static com.fyp.dashboard_pharmacy.TVID;
+
 
 public class dashboard extends AppCompatActivity
 {
     String refreshToken;
-    MaterialButton upload_button,custom_order,signout_button,get_location;
+    MaterialButton upload_button,custom_order,signout_button,get_location,generateComplaint;
     Button test;
     BottomNavigationView bottomNavigationMenu;
     RelativeLayout pending_order,loading_layout;
@@ -79,6 +86,14 @@ public class dashboard extends AppCompatActivity
         new_order_cluster=findViewById(R.id.new_order_cluster);
         TextView welcome=findViewById(R.id.welcome_text);
         loading_layout=findViewById(R.id.loadingPanel);
+        generateComplaint=findViewById(R.id.generate_complaint);
+        generateComplaint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(dashboard.this, viewComplains.class));
+            }
+        });
+        inflateCompletedOrders();
         String FullName=sharedPreferences.getString("NAME","");
         welcome.setText("Welcome "+FullName);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
@@ -178,8 +193,7 @@ public class dashboard extends AppCompatActivity
                     L1.setVisibility(View.GONE);
                     LinearLayout L = findViewById(R.id.settings);
                     L.setVisibility(View.VISIBLE);
-
-
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
                     return true;
                 }
                 if (item.getItemId() == R.id.bottomNavigationBrowse) {
@@ -187,6 +201,20 @@ public class dashboard extends AppCompatActivity
                     L1.setVisibility(View.GONE);
                     LinearLayout L = findViewById(R.id.browse);
                     L.setVisibility(View.VISIBLE);
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+
+
+
+
+                    return true;
+                }
+                if (item.getItemId() == R.id.bottomNavigationCompleted) {
+                    LinearLayout L1=findViewById(R.id.settings);
+                    L1.setVisibility(View.GONE);
+                    LinearLayout L = findViewById(R.id.browse);
+                    L.setVisibility(View.GONE);
+                    findViewById(R.id.completed_orders).setVisibility(View.VISIBLE);
+
 
 
                     return true;
@@ -279,6 +307,51 @@ public class dashboard extends AppCompatActivity
             });
 
             Log.d("tag",Double.toString(latitude+longitude));
+
+    }
+    void inflateCompletedOrders(){
+
+        db.collection("user_orders_completed").document(mAuth.getCurrentUser().getUid()).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+            if (!documentSnapshot.getString("count").equals("0")) {
+                TextView tv=findViewById(R.id.no_orders);
+                tv.setVisibility(View.GONE);
+                for (int i = 1; i <= Integer.parseInt(documentSnapshot.getString("count")); i++) {
+                    LayoutInflater l = LayoutInflater.from(dashboard.this);
+                    View v = l.inflate(R.layout.in_progress_orders_resource, null);
+                    LinearLayout parent = (LinearLayout) findViewById(R.id.orders_container);
+                    parent.addView(v);
+                    String stringText = "Order ID: " + documentSnapshot.getString("order" + i);
+                    TextView textView = findViewById(R.id.tv_customer);
+                    textView.setText(stringText);
+                    textView.setId(Integer.parseInt(Integer.toString(TVID) + i));
+                    textView = findViewById(R.id.email_hidden);
+                    textView.setText(documentSnapshot.getString("order" + i));
+                    textView.setId(Integer.parseInt(Integer.toString(EMAILID) + i));
+                    MaterialButton mButton = findViewById(R.id.details);
+                    mButton.setId(Integer.parseInt(Integer.toString(BUTTONID) + i));
+                    mButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            TextView t = findViewById(Integer.parseInt(
+                                    EMAILID + String.valueOf(Integer.toString(v.getId())
+                                            .charAt(Integer.toString(v.getId()).length() - 1))));
+                            startActivity(new Intent(dashboard.this, order_completed.class)
+                                    .putExtra("orderID", t.getText()));
+                            Log.d("tag", "email:" + t.getText());
+                        }
+                    });
+                }
+            }
+            else{
+                TextView textView=findViewById(R.id.no_orders);
+                textView.setVisibility(View.VISIBLE);
+            }
+
+                }
+        });
 
     }
 

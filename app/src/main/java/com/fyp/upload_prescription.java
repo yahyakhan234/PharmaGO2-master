@@ -57,6 +57,8 @@ public class upload_prescription extends AppCompatActivity {
     public static final String ORDER_TYPE_KEY="type";
     public static final String UID_KEY="UID";
     public static final String FULL_NAME_KEY="Name";
+    public static final String HAS_PRESCRIPTION_KEY="has_prescription";
+    public static final String UEMAIL_KEY="uemail";
 
     private static final String TAG = "CapturePicture";
     static final int REQUEST_PICTURE_CAPTURE = 1;
@@ -116,8 +118,9 @@ public class upload_prescription extends AppCompatActivity {
                     medicine_order.put(TIME_KEY,date);
                     medicine_order.put(UID_KEY,FirebaseAuth.getInstance().getCurrentUser().getUid());
                     medicine_order.put(FULL_NAME_KEY,"ame");
-                    medicine_order.put("uemail",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    medicine_order.put(UEMAIL_KEY,FirebaseAuth.getInstance().getCurrentUser().getEmail());
                     medicine_order.put(ORDER_TYPE_KEY,"Prescription upload");
+                    medicine_order.put(HAS_PRESCRIPTION_KEY,true);
                     db.collection("entityCount").document("TotalOrders")
                             .get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override

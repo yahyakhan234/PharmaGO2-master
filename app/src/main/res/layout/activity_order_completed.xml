@@ -128,9 +128,19 @@
             android:layout_height="wrap_content"
             android:id="@+id/submit_rating"
             android:text="Submit Rating"
+            android:visibility="gone"
             android:backgroundTint="@color/primaryTheme"
             android:layout_centerInParent="true"
             />
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/submit_rating_disabled"
+        android:text="Rating Submitted"
+        android:clickable="false"
+        android:backgroundTint="@color/main_color_gray"
+        android:layout_centerInParent="true"
+        />
 </RelativeLayout>
 
         <RelativeLayout
@@ -141,6 +151,18 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/pharmay_details_button"
                 android:text="View Pharmacy Details"
+                android:backgroundTint="@color/primaryTheme"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/view_prescription_button"
+                android:text="View Attached Prescription"
                 android:backgroundTint="@color/primaryTheme"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>

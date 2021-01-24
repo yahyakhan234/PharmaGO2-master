@@ -11,7 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".order_completed"></activity>
+        <activity android:name=".classes.complaintDetail"></activity>
+        <activity android:name=".classes.viewComplains" />
+        <activity android:name=".generateComplaint" />
+        <activity android:name=".reset_password" />
+        <activity android:name=".view_prescription" />
+        <activity android:name=".order_completed" />
         <activity android:name=".pharmacy_details" />
         <activity android:name=".live_chat_pharma" />
         <activity android:name=".nointernet" />
@@ -71,7 +76,22 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.fyp.android.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_list" />
+        </provider>
+
         <receiver android:name=".delivery_alarm_manager">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".five_mins_alarm_manager">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -94,17 +114,11 @@
             </intent-filter>
         </service>
         <service android:name=".timeRunnerService" />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.fyp.android.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_list"/>
-        </provider>
     </application>
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -114,10 +128,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

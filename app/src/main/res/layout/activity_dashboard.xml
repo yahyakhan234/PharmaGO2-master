@@ -6,13 +6,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".dashboard"
+    android:layout_gravity="center"
+    android:isScrollContainer="true"
     android:background="@drawable/background">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/browse"
     android:orientation="vertical"
-    android:visibility="visible">
+    android:visibility="gone">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -315,7 +317,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/settings"
-        android:visibility="gone">
+        android:visibility="visible">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -338,9 +340,6 @@
 
         </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -363,16 +362,113 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="10dp"
+            >
             <com.google.android.material.button.MaterialButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Get Location"
+                android:text="Update Location"
+                android:textSize="20sp"
                 android:id="@+id/get_location"
                 android:layout_centerInParent="true"
                 android:backgroundTint="@color/primaryTheme"/>
 
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/generate_complaint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="20sp"
+                android:backgroundTint="@color/primaryTheme"
+                android:text="View Complains"/>
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:isScrollContainer="true"
+        android:id="@+id/completed_orders">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="600dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:isScrollContainer="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="@color/primaryTheme">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Completed Orders"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/orders_container">
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+            <ProgressBar
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:indeterminate="true"
+                android:visibility="visible"
+                android:id="@+id/progress_bar"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="200dp"
+
+                />
+           </RelativeLayout>
+            <TextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:text="No Completed Orders"
+                android:id="@+id/no_orders"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+
+        </LinearLayout>
+        </ScrollView>
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Pervious Orders"
+            android:layout_centerInParent="true"
+            android:id="@+id/clear_orders"
+            android:padding="10dp"
+            android:backgroundTint="@color/primaryTheme"/>
+    </RelativeLayout>
 
     </LinearLayout>
     <RelativeLayout
@@ -389,6 +485,7 @@
             app:itemTextColor="#fff"
             android:background="@color/primaryTheme"
             app:menu="@menu/bottom_navigation_menu" />
+
 
 
     </RelativeLayout>

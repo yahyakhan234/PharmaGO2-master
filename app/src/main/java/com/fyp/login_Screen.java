@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -35,7 +36,7 @@ import com.tiper.MaterialSpinner;
 public class login_Screen extends AppCompatActivity {
 
     MaterialSpinner spinner2;
-    Button login_button,register1;
+    Button login_button,register1,forgotPasswordButton;
 
     String email;
     String password;
@@ -66,16 +67,22 @@ public class login_Screen extends AppCompatActivity {
         Log.d("switch check", "check for firebase and reference");
 
 
-
         String selected_option;
         setContentView(R.layout.activity_login_screen);
+        forgotPasswordButton=findViewById(R.id.forgot_password);
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(login_Screen.this,reset_password.class));
+            }
+        });
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, ITEMS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        final MaterialSpinner materialSpinner = findViewById(R.id.material_spinner);
+        final MaterialSpinner materialSpinner ;
         final TextInputLayout em = findViewById(R.id.email1);
         final TextInputLayout pw = findViewById(R.id.password1);
 
-        materialSpinner.setAdapter(adapter);
+
         login_button=findViewById(R.id.login_button);
         register1=findViewById(R.id.register1);
         register1.setOnClickListener(new View.OnClickListener() {
@@ -94,175 +101,235 @@ public class login_Screen extends AppCompatActivity {
             public void onClick(View v) {
 
 
+                String email = em.getEditText().getText().toString();
+                String password = pw.getEditText().getText().toString();
+                boolean reject = false;
+                reject = email.trim().isEmpty() || password.trim().isEmpty();
+                String selected_option ;
+               /* if (selected_option==null){
+                    selected_option="";
+                }*/
+                if (!reject){
+                    final ProgressDialog wait=ProgressDialog.show(login_Screen.this,"Processing","Logging You in, Please Wait",true);
 
-        String selected_option= (String) materialSpinner.getSelectedItem();
-        String email= em.getEditText().getText().toString();
-        String password= pw.getEditText().getText().toString();
-        Log.d("switch check", selected_option);
-        switch (selected_option) {
-            case "Patient": {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    wait.dismiss();
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
 
 
-                                    Toast.makeText(login_Screen.this,"Success",Toast.LENGTH_LONG).show();
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                                        Toast.makeText(login_Screen.this, "Success", Toast.LENGTH_LONG).show();
+                                        FirebaseUser user = mAuth.getCurrentUser();
 
-                                    if( user != null) {
-                                        FirebaseFirestore.getInstance()
-                                                .collection("users")
-                                                .document(user.getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        if (user != null) {
+                                            FirebaseFirestore.getInstance()
+                                                    .collection("users")
+                                                    .document(user.getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                    SharedPreferences sharedPreferences
+                                                            = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+
+                                                    SharedPreferences.Editor editPrefs;
+                                                    editPrefs = sharedPreferences.edit();
+
+                                                    name = documentSnapshot.getString("Full Name");
+                                                    String type = documentSnapshot.getString("User Type");
+                                                    Log.d("NameTag", ":" + name);
+
+                                                    Log.d("NameTag", "Name:" + name);
+                                                    editPrefs.putString("NAME", name);
+                                                    editPrefs.putString("USER_TYPE", type);
+                                                    editPrefs.commit();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+
+                                                }
+                                            });
+
+
+                                        }
+                                        finish();
+                                        startActivity(new Intent(login_Screen.this,splash_screen.class));
+                                        //  startActivity(new Intent(login_Screen.this, dashboard.class));
+
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w("chk", "signInWithEmail:failure", task.getException());
+                                        Toast.makeText(login_Screen.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                        updateUI(null);
+                                    }
+
+
+                                }
+                            });
+
+
+
+               /* switch (selected_option) {
+                    case "Patient": {
+                        mAuth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Sign in success, update UI with the signed-in user's information
+
+
+                                            Toast.makeText(login_Screen.this, "Success", Toast.LENGTH_LONG).show();
+                                            FirebaseUser user = mAuth.getCurrentUser();
+
+                                            if (user != null) {
+                                                FirebaseFirestore.getInstance()
+                                                        .collection("users")
+                                                        .document(user.getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                         SharedPreferences sharedPreferences
-                                                                =getSharedPreferences("USER_DETAIL",MODE_PRIVATE);
+                                                                = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
 
                                                         SharedPreferences.Editor editPrefs;
-                                                        editPrefs=sharedPreferences.edit();
+                                                        editPrefs = sharedPreferences.edit();
 
                                                         name = documentSnapshot.getString("Full Name");
-                                                        String type=documentSnapshot.getString("User Type");
-                                                        Log.d("NameTag",":"+name);
+                                                        String type = documentSnapshot.getString("User Type");
+                                                        Log.d("NameTag", ":" + name);
 
-                                                        Log.d("NameTag","Name:"+name);
+                                                        Log.d("NameTag", "Name:" + name);
                                                         editPrefs.putString("NAME", name);
-                                                        editPrefs.putString("USER_TYPE",type);
+                                                        editPrefs.putString("USER_TYPE", type);
                                                         editPrefs.commit();
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                    }
+                                                });
+
 
                                             }
-                                        });
+                                            finish();
+                                            startActivity(new Intent(login_Screen.this,splash_screen.class));
+                                          //  startActivity(new Intent(login_Screen.this, dashboard.class));
 
-
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Log.w("chk", "signInWithEmail:failure", task.getException());
+                                            Toast.makeText(login_Screen.this, "Authentication failed.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            updateUI(null);
+                                        }
 
 
                                     }
-
-
-                                    startActivity(new Intent(login_Screen.this, dashboard.class));
-
-                                }
-                                else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("chk", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(login_Screen.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
-                                }
-
-
-
-                            }
-                        });
+                                });
 
 
                         break;
 
 
+                    }
+                    case "Laboratory": {
+                        mAuth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Sign in success, update UI with the signed-in user's information
+                                            Toast.makeText(login_Screen.this, "Success", Toast.LENGTH_LONG).show();
+                                            FirebaseUser user = mAuth.getCurrentUser();
 
-            }
-            case "Laboratory":
-            {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(login_Screen.this,"Success",Toast.LENGTH_LONG).show();
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                                            if (user != null) {
+                                                FirebaseFirestore.getInstance()
+                                                        .collection("users")
+                                                        .document(user.getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        SharedPreferences sharedPreferences
+                                                                = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
 
-                                    if( user != null) {
-                                        FirebaseFirestore.getInstance()
-                                                .collection("users")
-                                                .document(user.getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                SharedPreferences sharedPreferences
-                                                        = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+                                                        SharedPreferences.Editor editPrefs;
+                                                        editPrefs = sharedPreferences.edit();
 
-                                                SharedPreferences.Editor editPrefs;
-                                                editPrefs = sharedPreferences.edit();
+                                                        name = documentSnapshot.getString("Full Name");
+                                                        String type = documentSnapshot.getString("User Type");
+                                                        Log.d("NameTag", ":" + name);
 
-                                                name = documentSnapshot.getString("Full Name");
-                                                String type = documentSnapshot.getString("User Type");
-                                                Log.d("NameTag", ":" + name);
+                                                        Log.d("NameTag", "Name:" + name);
+                                                        editPrefs.putString("NAME", name);
+                                                        editPrefs.putString("USER_TYPE", type);
+                                                        editPrefs.commit();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
 
-                                                Log.d("NameTag", "Name:" + name);
-                                                editPrefs.putString("NAME", name);
-                                                editPrefs.putString("USER_TYPE", type);
-                                                editPrefs.commit();
+                                                    }
+                                                });
                                             }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
 
-                                            }
-                                        });
+                                            startActivity(new Intent(login_Screen.this, dashboard_lab.class));
+
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Log.w("chk", "signInWithEmail:failure", task.getException());
+                                            Toast.makeText(login_Screen.this, "Authentication failed.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            updateUI(null);
+                                        }
+
+
                                     }
-
-
-
-
-                                        startActivity(new Intent(login_Screen.this, dashboard_lab.class));
-
-                                }
-                                else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("chk", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(login_Screen.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
-                                }
-
-
-
-                            }
-                        });
+                                });
 
 
                         break;
 
-        }
-            case "Pharmacy":
-            {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Toast.makeText(login_Screen.this,"Success",Toast.LENGTH_LONG).show();
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    startActivity(new Intent(login_Screen.this, dashboard_pharmacy.class));
-                                    finish();
-                                }
-                                else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w("chk", "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(login_Screen.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
-                                }
+                    }
+                    case "Pharmacy": {
+                        mAuth.signInWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Sign in success, update UI with the signed-in user's information
+                                            Toast.makeText(login_Screen.this, "Success", Toast.LENGTH_LONG).show();
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            startActivity(new Intent(login_Screen.this, dashboard_pharmacy.class));
+                                            finish();
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Log.w("chk", "signInWithEmail:failure", task.getException());
+                                            Toast.makeText(login_Screen.this, "Authentication failed.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            updateUI(null);
+                                        }
 
 
-
-                            }
-                        });
+                                    }
+                                });
 
                         break;
 
+                    }
+                    default:{
+                        Toast.makeText(login_Screen.this,"Please Select A valid option",Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }*/
             }
+                else{
+                    Toast.makeText(login_Screen.this,"Please Do not leave fields blank",Toast.LENGTH_SHORT).show();
 
-
-        }
+                }
 
             }
 

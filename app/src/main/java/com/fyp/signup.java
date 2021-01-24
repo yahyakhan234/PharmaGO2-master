@@ -3,6 +3,7 @@ package com.fyp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,7 +50,14 @@ public class signup extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, ITEMS);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+        Button goToSignin=findViewById(R.id.go_to_signin);
+        goToSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(signup.this,login_Screen.class));
+            }
+        });
         final MaterialSpinner materialSpinner = findViewById(R.id.user_type);
         materialSpinner.setAdapter(adapter);
         final TextInputLayout unm=findViewById(R.id.username);

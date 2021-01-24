@@ -43,7 +43,7 @@ public class live_chat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateCount=Count=1;
+        updateCount=Count=0;
         setContentView(R.layout.activity_live_chat);
         liveChatID=getIntent().getStringExtra("id");
         SendButton=findViewById(R.id.send_message);

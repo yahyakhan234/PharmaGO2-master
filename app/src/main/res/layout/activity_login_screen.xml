@@ -34,17 +34,7 @@
         android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
-        <com.tiper.MaterialSpinner
-            android:id="@+id/material_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="#000"
-            android:textColorHint="#000"
 
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint="Select User Type"
-
-            />
 
 
 
@@ -53,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/email1"
-            android:hint="Username"
+            android:hint="Email"
 
             app:helperTextTextColor="@color/black"
             app:placeholderTextColor="@color/black"
@@ -71,6 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:inputType="textEmailAddress"
+
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -103,8 +95,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:background="#00000000"
+            android:backgroundTint="@color/white"
             android:elevation="0dp"
+            android:id="@+id/forgot_password"
+            android:textColor="@color/black"
             android:text="Forgot Password?" />
 
         <Button

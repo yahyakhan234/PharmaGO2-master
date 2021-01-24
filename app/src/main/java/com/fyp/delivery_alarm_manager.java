@@ -29,8 +29,9 @@ public class delivery_alarm_manager extends BroadcastReceiver {
         Map<String,Object> m=new HashMap<>();
         m.put("in_time",false);
         db.collection("users")
-                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()
-                        .getEmail())).set(m, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                .set(m, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 db.collection("processed_accepted_order")

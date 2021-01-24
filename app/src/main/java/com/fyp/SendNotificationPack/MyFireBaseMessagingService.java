@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import com.fyp.Buy_Requests;
 import com.fyp.customer_order_processed;
 import com.fyp.dashboard_pharmacy;
+import com.fyp.five_mins_alarm_manager;
 import com.fyp.live_chat;
 import com.fyp.live_chat_pharma;
 import com.fyp.timeRunnerService;
@@ -37,6 +38,11 @@ import java.util.Set;
 
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
     String title,message;
+    //public static final long HOUR_TIME=3600000;       //actual
+    //public static final long FIVE_MINUTE_TIME=300000; //actual
+
+    public static final long HOUR_TIME=10000;   //test
+    public static final long FIVE_MINUTE_TIME=10000; //test
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -142,11 +148,15 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
        /* Intent serviceIntent = new Intent(this, timeRunnerService.class);
         ContextCompat.startForegroundService(this, serviceIntent);*/
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager1= (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent1 = new Intent(this, delivery_alarm_manager.class);
+        Intent intent2=new Intent(this, five_mins_alarm_manager.class);
+        PendingIntent pendingIntent2=PendingIntent.getBroadcast(this,1,intent2,0);
         PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 1, intent1, 0);
-        int time= (int) (System.currentTimeMillis()+300000);
+        long time=  (System.currentTimeMillis()+HOUR_TIME);
+        long fiveMins=(System.currentTimeMillis()+FIVE_MINUTE_TIME);
         Map<String,Object> map=new HashMap<>();
-        map.put("final_time",time);
+        map.put("final_time",""+time);
         FirebaseFirestore.getInstance().collection("processed_unaccepted_order")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
                 .set(map, SetOptions.merge());
@@ -154,9 +164,11 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                 = getSharedPreferences("order_time", MODE_PRIVATE);
         SharedPreferences.Editor editPrefs;
         editPrefs = sharedPreferences.edit();
-        editPrefs.putInt("time", time);
+        editPrefs.putLong("time", time);
+        editPrefs.putLong("fiveMins",fiveMins);
         editPrefs.apply();
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent1);
+        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent1);
+        alarmManager1.setExact(AlarmManager.RTC_WAKEUP,fiveMins,pendingIntent2);
         Log.d("Alarm time","Alarm Set For: "+((time)/1000));
 
 

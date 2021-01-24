@@ -33,6 +33,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fyp.upload_prescription.HAS_PRESCRIPTION_KEY;
+import static com.fyp.upload_prescription.UEMAIL_KEY;
 import static java.security.AccessController.getContext;
 
 public class customer_custom_request extends AppCompatActivity {
@@ -101,9 +103,10 @@ public class customer_custom_request extends AppCompatActivity {
                    }
 
                     medicine_order.put(UID_KEY,mAuth.getCurrentUser().getUid());
-                    medicine_order.put("uemail",mAuth.getCurrentUser().getEmail());
+                    medicine_order.put(UEMAIL_KEY,mAuth.getCurrentUser().getEmail());
                     medicine_order.put(FULL_NAME_KEY,sharedPreferences.getString("NAME",""));
                     medicine_order.put(ORDER_COUNT_KEY,Integer.toString(counter));
+                    medicine_order.put(HAS_PRESCRIPTION_KEY,false);
                 @SuppressLint("SimpleDateFormat")
                 DateFormat df = new SimpleDateFormat("H:mm a");
                 String date = df.format(Calendar.getInstance().getTime());

@@ -128,4 +128,13 @@ public class Buy_Requests extends AppCompatActivity {
 
         });*/
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }

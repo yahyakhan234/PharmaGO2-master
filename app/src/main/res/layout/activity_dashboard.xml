@@ -14,7 +14,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/browse"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:visibility="visible">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,7 +49,8 @@
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:gravity="center" >
+        android:gravity="center"
+        android:visibility="gone">
 
         <ProgressBar
             android:layout_width="150dp"
@@ -115,7 +116,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/new_order_cluster"
         >
 
@@ -172,6 +173,71 @@
                 app:backgroundTint="#00a599"
                 tools:targetApi="m" />
         </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ongoing_lab_test"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@color/primaryTheme"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:id="@+id/pending_lab_view"
+            android:clickable="true"
+            android:focusable="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                >
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Image"
+                    android:id="@+id/lab_image_pending"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/pending_order"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pending Order"
+                    android:layout_margin="5dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+
+                    android:layout_toRightOf="@+id/lab_image_pending"
+                    android:layout_alignParentTop="true"
+                    android:textSize="20sp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white"
+                    android:layout_toRightOf="@+id/lab_image_pending"
+                    android:layout_margin="5dp"
+                    android:text="You have an upcoming lab test, tap to view details"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/lab_test_cluster"
+        android:visibility="gone">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -186,125 +252,28 @@
                 android:justificationMode="inter_word"
                 />
         </RelativeLayout>
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
             >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 >
-
-                <RelativeLayout
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.5">
-
-                    <Button
-                        android:id="@+id/test1"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/md_transparent"
-
-                        android:gravity="center|bottom"
-
-                        android:text="Cholestrol Test"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/labtest"
-                        android:scaleType="fitStart"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5">
-
-                    <Button
-                        android:id="@+id/test2"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/md_transparent"
-
-                        android:gravity="center|bottom"
-
-                        android:text="Corona Virus Test"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/labtest"
-                        android:scaleType="fitStart"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5">
-
-                    <Button
-                        android:id="@+id/test3"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/md_transparent"
-
-                        android:gravity="center|bottom"
-
-                        android:text="Blood Sugar Test"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/labtest"
-                        android:scaleType="fitStart"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
+                    android:id="@+id/test_inflate_container"
+                    android:orientation="horizontal"
+                    >
 
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5">
 
-                    <Button
-                        android:id="@+id/test4"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/md_transparent"
 
-                        android:gravity="center|bottom"
+                </LinearLayout>
 
-                        android:text="Blood CP"
-                        android:textSize="15sp" />
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/labtest"
-                        android:scaleType="fitStart"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
-
-                <ImageButton
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="20dp"
-                    android:src="@drawable/home_icon"
-                    android:scaleType="fitStart"
-                    android:visibility="invisible"
-                    />
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
-
+            </HorizontalScrollView>
+        </LinearLayout>
     </LinearLayout>
 
 
@@ -317,7 +286,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/settings"
-        android:visibility="visible">
+        android:visibility="gone">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

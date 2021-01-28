@@ -57,14 +57,14 @@
         android:padding="10dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/check_orders"
+            android:id="@+id/view_requested_bookings"
             style="@android:style/Widget.Material.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:padding="20dp"
+            android:text="View Requested Bookings"
             android:textColor="@color/white"
-            android:text="Check Orders"
             android:textSize="20sp"
             app:backgroundTint="#00a599"
             tools:targetApi="m" />

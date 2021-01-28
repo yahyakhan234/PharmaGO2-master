@@ -16,6 +16,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.fyp.Buy_Requests;
+import com.fyp.customer_lab_booking;
 import com.fyp.customer_order_processed;
 import com.fyp.dashboard_pharmacy;
 import com.fyp.five_mins_alarm_manager;
@@ -72,6 +73,11 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         }
         else if (title.equalsIgnoreCase("Order Completed")){
             orderCompletedNotify(title,message);
+
+        }
+        else if (title.equalsIgnoreCase("Accept Booking")){
+
+
 
         }
         else {
@@ -152,7 +158,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         Intent intent1 = new Intent(this, delivery_alarm_manager.class);
         Intent intent2=new Intent(this, five_mins_alarm_manager.class);
         PendingIntent pendingIntent2=PendingIntent.getBroadcast(this,1,intent2,0);
-        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 1, intent1, 0);
+        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(this, 2, intent1, 0);
         long time=  (System.currentTimeMillis()+HOUR_TIME);
         long fiveMins=(System.currentTimeMillis()+FIVE_MINUTE_TIME);
         Map<String,Object> map=new HashMap<>();
@@ -167,7 +173,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         editPrefs.putLong("time", time);
         editPrefs.putLong("fiveMins",fiveMins);
         editPrefs.apply();
-        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent1);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent1);
         alarmManager1.setExact(AlarmManager.RTC_WAKEUP,fiveMins,pendingIntent2);
         Log.d("Alarm time","Alarm Set For: "+((time)/1000));
 
@@ -189,6 +195,27 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         notification.flags|=Notification.FLAG_INSISTENT;
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(1, notification);
+    }
+    private void acceptBooking(String title,String message){
+        Intent intent = new Intent(this, customer_lab_booking.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.drawable.logo_splash)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        notificationManager.notify(1, builder.build());
+
+
+
+
     }
     private void newMessageNotify(String liveChatID){
         SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);

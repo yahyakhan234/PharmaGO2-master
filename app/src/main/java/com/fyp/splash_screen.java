@@ -149,8 +149,9 @@ public class splash_screen extends AppCompatActivity {
                                     break;
                                 }
                                 case "Laboratory": {
-
-
+                                    startActivity(new Intent(splash_screen.this, dashboard_lab.class));
+                                    finish();
+                                    break;
                                 }
                                 case "Pharmacy": {
                                     startActivity(new Intent(splash_screen.this, dashboard_pharmacy.class));

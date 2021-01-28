@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context=".customer_lab_booking"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:background="#00a599">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="PharmaGO"
+            android:textColor="#fff"
+
+
+            android:textSize="30sp"
+
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+
+        android:background="@android:color/darker_gray"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/customborder"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:text="Test Laboratory"
+                android:textColor="#000"
+                android:textSize="20sp"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp">
+
+                <TextView
+
+                    android:id="@+id/test_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Blood Sugar Test"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/total"
+                    android:text="Price:"
+                    app:counterEnabled="true"
+                    android:textSize="20sp"
+                    android:textColor="#000"
+                    app:hintTextColor="#000" />
+
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Appointment Day:"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="20sp" />
+
+
+                <TextView
+                    android:id="@+id/date_requested"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="10/5/2020"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    app:counterEnabled="true"
+                    app:hintTextColor="#000" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Appointment Time"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="20sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="13:30"
+                    app:counterEnabled="true"
+                    android:id="@+id/time_requested"
+                    android:textSize="20sp"
+                    android:textColor="#000"
+                    app:hintTextColor="#000" />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Result In days:"
+                    android:textColor="@android:color/background_dark"
+                    android:textSize="20sp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="13:30"
+                    app:counterEnabled="true"
+                    android:id="@+id/result_in_days"
+                    android:textSize="20sp"
+                    android:textColor="#000"
+                    app:hintTextColor="#000" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/download_result"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:padding="19dp"
+            android:text="Download Result"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            app:backgroundTint="#00a599"
+            tools:targetApi="m"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_alignParentLeft="true"
+
+            android:layout_margin="20dp"
+            android:padding="19dp"
+            android:text="Cancel Order"
+            android:textSize="15sp"
+            android:textColor="#fff"
+            app:backgroundTint="@color/primaryTheme"
+            tools:targetApi="m"
+            />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel_button_disabled"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="20dp"
+            android:padding="19dp"
+            android:text="Cancel Order"
+            android:textSize="15sp"
+            android:textColor="#fff"
+            app:backgroundTint="@color/main_color_gray"
+            tools:targetApi="m" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/live_chat"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:padding="19dp"
+            android:text="Chat Session"
+            android:textSize="15sp"
+            android:textColor="#fff"
+            app:backgroundTint="#00a599"
+            tools:targetApi="m" />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/accept_button"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_alignParentRight="true"
+
+            android:layout_margin="20dp"
+            android:padding="19dp"
+            android:text="Accept Order"
+            android:textSize="15sp"
+            android:textColor="#fff"
+            app:backgroundTint="@color/primaryTheme"
+            tools:targetApi="m"
+            />
+
+
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:id="@+id/lab_location"
+            android:backgroundTint="@color/primaryTheme"
+            android:text="Lab Location"
+            android:padding="10dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+
+
+</LinearLayout>

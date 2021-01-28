@@ -52,12 +52,14 @@ import static com.fyp.dashboard_pharmacy.TVID;
 
 public class dashboard extends AppCompatActivity
 {
+    public static final int TEST_BUTTON_ID=200;
+    public static final int TEST_ID_TEXTVIEW_ID=201;
     String refreshToken;
     MaterialButton upload_button,custom_order,signout_button,get_location,generateComplaint;
     Button test;
     BottomNavigationView bottomNavigationMenu;
     RelativeLayout pending_order,loading_layout;
-    LinearLayout new_order_cluster;
+    LinearLayout new_order_cluster,lab_test_cluster,ongoing_lab_test;
     String status;
     private FirebaseAuth mAuth;
     Location gps_loc;
@@ -76,7 +78,7 @@ public class dashboard extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         final FirebaseUser firebaseUser=mAuth.getCurrentUser();
         setContentView(R.layout.activity_dashboard);
-        test=findViewById(R.id.test3);
+
         upload_button=findViewById(R.id.upload_prescription);
         custom_order=findViewById(R.id.custom_request);
         bottomNavigationMenu=findViewById(R.id.bottom_navigation);
@@ -86,7 +88,15 @@ public class dashboard extends AppCompatActivity
         new_order_cluster=findViewById(R.id.new_order_cluster);
         TextView welcome=findViewById(R.id.welcome_text);
         loading_layout=findViewById(R.id.loadingPanel);
+        lab_test_cluster=findViewById(R.id.lab_test_cluster);
         generateComplaint=findViewById(R.id.generate_complaint);
+        ongoing_lab_test=findViewById(R.id.ongoing_lab_test);
+        ongoing_lab_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(dashboard.this,customer_lab_booking.class));
+            }
+        });
         generateComplaint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,6 +104,7 @@ public class dashboard extends AppCompatActivity
             }
         });
         inflateCompletedOrders();
+        inflateTests();
         String FullName=sharedPreferences.getString("NAME","");
         welcome.setText("Welcome "+FullName);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
@@ -114,6 +125,14 @@ public class dashboard extends AppCompatActivity
                     pending_order.setVisibility(View.GONE);
                 }
                 status=documentSnapshot.getString("status");
+                if (documentSnapshot.getBoolean(customer_lab_booking.HAS_TEST_BOOKED_KEY)){
+                    lab_test_cluster.setVisibility(View.GONE);
+                    ongoing_lab_test.setVisibility(View.VISIBLE);
+                }
+                else{
+                    lab_test_cluster.setVisibility(View.VISIBLE);
+                    ongoing_lab_test.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -149,13 +168,6 @@ public class dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(dashboard.this, customer_custom_request.class));
-
-            }
-        });
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(dashboard.this, customer_book_test.class));
 
             }
         });
@@ -354,7 +366,45 @@ public class dashboard extends AppCompatActivity
         });
 
     }
+    void inflateTests(){
 
+        db.collection("entityCount").document("lab_tests").get(Source.SERVER)
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (!documentSnapshot.getString("count").equals("0")) {
+                    for (int i = 1; i <= Integer.parseInt(documentSnapshot.getString("count")); i++) {
+                        LayoutInflater l = LayoutInflater.from(dashboard.this);
+                        View v = l.inflate(R.layout.lab_test_view, null);
+                        LinearLayout parent = (LinearLayout) findViewById(R.id.test_inflate_container);
+                        parent.addView(v);
+                        TextView textView;
+                        textView = findViewById(R.id.testid);
+                        textView.setText(documentSnapshot.getString("testID" + i));
+                        textView.setId(Integer.parseInt(Integer.toString(TEST_ID_TEXTVIEW_ID) + i));
+                        String stringText = "Test Type\n" + documentSnapshot.getString("test" + i);
+                        Button mButton = findViewById(R.id.test_button);
+                        mButton.setText(stringText);
+                        mButton.setId(Integer.parseInt(Integer.toString(TEST_BUTTON_ID) + i));
+                        mButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TextView t = findViewById(Integer.parseInt(
+                                        TEST_ID_TEXTVIEW_ID + String.valueOf(Integer.toString(v.getId())
+                                                .charAt(Integer.toString(v.getId()).length() - 1))));
+                                startActivity(new Intent(dashboard.this, customer_book_test.class)
+                                        .putExtra("testID", t.getText()));
+                                Log.d("tag", "testID:" + t.getText());
+                            }
+                        });
+                    }
+                }
+
+            }
+        });
+
+
+    }
 
 
 }

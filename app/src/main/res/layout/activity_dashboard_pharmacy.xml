@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/browse"
     android:orientation="vertical"
-    android:visibility="visible">
+    android:visibility="gone">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/settings"
-        android:visibility="gone">
+        android:visibility="visible">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,9 +138,6 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
-        <RelativeLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp">
             <com.google.android.material.button.MaterialButton
@@ -151,6 +148,20 @@
                 android:layout_centerInParent="true"
                 android:backgroundTint="@color/primaryTheme"/>
 
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/primaryTheme"
+                android:text="View Complains"
+                android:id="@+id/view_complain"
+
+                />
         </RelativeLayout>
 
         <RelativeLayout

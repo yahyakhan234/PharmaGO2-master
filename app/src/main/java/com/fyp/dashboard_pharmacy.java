@@ -44,7 +44,7 @@ public class dashboard_pharmacy extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationMenu;
     String refreshToken;
-    MaterialButton status_button,signout_button,buy_order_button,get_location;
+    MaterialButton status_button,signout_button,buy_order_button,get_location,viewComplainsButton;
     FirebaseAuth mAuth;
     Location gps_loc;
     Location network_loc;
@@ -71,6 +71,13 @@ public class dashboard_pharmacy extends AppCompatActivity {
 
          status_button  = findViewById(R.id.status_set);
          buy_order_button=findViewById(R.id.check_orders);
+         viewComplainsButton=findViewById(R.id.view_complain);
+         viewComplainsButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 
+             }
+         });
 
         get_location=findViewById(R.id.get_location);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);

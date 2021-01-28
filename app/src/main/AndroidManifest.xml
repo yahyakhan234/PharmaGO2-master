@@ -11,7 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".classes.complaintDetail"></activity>
+        <activity android:name=".customer_lab_booking" />
+
+        <activity android:name=".lab_order_detail" />
+        <activity android:name=".view_available_test" />
+        <activity android:name=".classes.complaintDetail" />
         <activity android:name=".classes.viewComplains" />
         <activity android:name=".generateComplaint" />
         <activity android:name=".reset_password" />
@@ -20,11 +24,11 @@
         <activity android:name=".pharmacy_details" />
         <activity android:name=".live_chat_pharma" />
         <activity android:name=".nointernet" />
+        <activity android:name=".signup" />
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
         -->
-        <activity android:name=".signup" />
         <activity android:name=".pharmacy_prescription_upload" />
         <activity android:name=".order_accepted_lab" />
         <activity android:name=".searching_lab" />
@@ -51,6 +55,7 @@
             android:name=".searching_deliverer"
             android:label="@string/title_activity_searching_deliverer" />
         <activity android:name=".upload_prescription" />
+        <activity android:name=".dashboard" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -59,7 +64,6 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-        <activity android:name=".dashboard" />
         <activity android:name=".splash_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,14 +72,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".login_Screen" />
-
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.fyp.android.fileprovider"
@@ -85,6 +88,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_list" />
         </provider>
+
+        <receiver
+            android:name=".booking_alarm"
+            android:enabled="true"
+            android:exported="true"></receiver>
 
         <receiver android:name=".delivery_alarm_manager">
             <intent-filter>

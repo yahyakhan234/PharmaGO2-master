@@ -58,14 +58,15 @@ public class GenerateNotif {
 
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     // Note note = documentSnapshot.toObject(Note.class);
-                    new_user.setUID(documentSnapshot.getId());
-                    new_user.setUToken(documentSnapshot.getString("token"));
-                    onlineUsers.add(new_user);
-                    // String userID=documentSnapshot.getId();
-                    //String userToken=documentSnapshot.getString("UID");
+                        new_user.setUID(documentSnapshot.getId());
+                        new_user.setUToken(documentSnapshot.getString("token"));
+                        onlineUsers.add(new_user);
+                        // String userID=documentSnapshot.getId();
+                        //String userToken=documentSnapshot.getString("UID");
 
-                    sendNotifications(new_user.getUToken(),"New Buy Request", "Customer");
-                    Log.d("Token Check",new_user.getUID()+" "+new_user.getUToken());
+                        sendNotifications(new_user.getUToken(), "New Buy Request", "Customer");
+                        Log.d("Token Check", new_user.getUID() + " " + new_user.getUToken());
+
                 /*    note.setDocumentId(documentSnapshot.getId());
                     String documentId = note.getDocumentId();
                     String title = note.getTitle();
@@ -84,7 +85,118 @@ public class GenerateNotif {
 
 
     }
+    void sendNotificationToAllLabs(){
 
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+
+        usersRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                online_user new_user=new online_user();
+
+                SharedPreferences sharedPreferences;
+
+
+
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    // Note note = documentSnapshot.toObject(Note.class);
+                    if (documentSnapshot.getString("userType").equals("lab")) {
+                        new_user.setUID(documentSnapshot.getId());
+                        new_user.setUToken(documentSnapshot.getString("token"));
+                        onlineUsers.add(new_user);
+                        // String userID=documentSnapshot.getId();
+                        //String userToken=documentSnapshot.getString("UID");
+
+                        sendNotifications(new_user.getUToken(), "New Buy Request", "Customer");
+                        Log.d("Token Check", new_user.getUID() + " " + new_user.getUToken());
+                    }
+                /*    note.setDocumentId(documentSnapshot.getId());
+                    String documentId = note.getDocumentId();
+                    String title = note.getTitle();
+                    String description = note.getDescription();
+                    data += "ID: " + documentId
+                            + "\nTitle: " + title + "\nDescription: " + description + "\n\n";*/
+                }
+            }
+        });
+
+
+
+
+
+
+
+    }
+    void sendNotificationToAllPharmacists(){
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+
+        usersRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+                online_user new_user=new online_user();
+
+                SharedPreferences sharedPreferences;
+
+
+
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    // Note note = documentSnapshot.toObject(Note.class);
+                    if (documentSnapshot.getString("userType").equals("pharma")) {
+                        new_user.setUID(documentSnapshot.getId());
+                        new_user.setUToken(documentSnapshot.getString("token"));
+                        onlineUsers.add(new_user);
+                        // String userID=documentSnapshot.getId();
+                        //String userToken=documentSnapshot.getString("UID");
+
+                        sendNotifications(new_user.getUToken(), "New Buy Request", "Customer");
+                        Log.d("Token Check", new_user.getUID() + " " + new_user.getUToken());
+                    }
+                /*    note.setDocumentId(documentSnapshot.getId());
+                    String documentId = note.getDocumentId();
+                    String title = note.getTitle();
+                    String description = note.getDescription();
+                    data += "ID: " + documentId
+                            + "\nTitle: " + title + "\nDescription: " + description + "\n\n";*/
+                }
+            }
+        });
+
+
+
+
+
+
+
+    }
+    public void sendNotificationToUserFromLab(String UID){
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+        usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Accept Booking","You booking request has been processed. Please accept booking, Tap to view");
+            }
+        });
+
+    }
     public void sendNotificationToSingleUser(String UID){
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 

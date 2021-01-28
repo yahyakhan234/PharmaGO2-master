@@ -15,6 +15,13 @@ public class dashboard_lab extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_lab);
         MaterialButton status_button  = findViewById(R.id.status_set);
+        MaterialButton view_tests_button=findViewById(R.id.view_requested_bookings);
+        view_tests_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(dashboard_lab.this,buy_requests_lab.class));
+            }
+        });
         status_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

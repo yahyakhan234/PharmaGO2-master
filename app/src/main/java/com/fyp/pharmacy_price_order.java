@@ -3,7 +3,10 @@ package com.fyp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,9 +43,10 @@ public class pharmacy_price_order extends AppCompatActivity {
     public static final String TOTAL_KEY="total";
     public static final String TAG="move doc";
     private FirebaseFirestore db;
+    private String orderID;
     int count,bill;
     String UID;
-    private String orderID;
+    ProgressDialog wait;
 
     Context context;
 
@@ -56,7 +60,7 @@ public class pharmacy_price_order extends AppCompatActivity {
         String s=getIntent().getStringExtra("Email");
         Log.d("extra","no??:"+ s);
         //context=this;
-
+        wait=ProgressDialog.show(pharmacy_price_order.this,"Processing","Please Wait");
         db=FirebaseFirestore.getInstance();
         db.collection("orders").document(s).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -78,6 +82,7 @@ public class pharmacy_price_order extends AppCompatActivity {
                     TextInputLayout textInputLayout=findViewById(R.id.price);
                     textInputLayout.setId(Integer.parseInt(PRICE_ID+i));
                 }
+                wait.dismiss();
                 UID=documentSnapshot.getString("UID");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -105,7 +110,7 @@ public class pharmacy_price_order extends AppCompatActivity {
         process_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                wait=ProgressDialog.show(pharmacy_price_order.this,"Processing","Please Wait");
                 TextInputLayout temp;
                 String s;
 
@@ -164,6 +169,19 @@ public class pharmacy_price_order extends AppCompatActivity {
                                                                         .document("LC"+orderID)
                                                                         .set(map);
                                                                new GenerateNotif().sendNotificationToSingleUser(UID);
+                                                               wait.dismiss();
+
+                                                                new AlertDialog.Builder(pharmacy_price_order.this)
+                                                                        .setTitle("Done!")
+                                                                        .setMessage("Your order has been Processed, You will be notified if customer accepts your bid")
+                                                                        .setIcon(R.drawable.logo_splash)
+                                                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                finish();
+                                                                            }
+                                                                        })
+                                                                        .show();
                                                             }
                                                         })
                                                         .addOnFailureListener(new OnFailureListener() {

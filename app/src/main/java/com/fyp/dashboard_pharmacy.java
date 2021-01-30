@@ -153,6 +153,9 @@ public class dashboard_pharmacy extends AppCompatActivity {
         signout_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SharedPreferences settings = getSharedPreferences("USER_DETAIL", Context.MODE_PRIVATE);
+                settings.edit().clear().commit();
                 finish();
                 startActivity(new Intent(dashboard_pharmacy.this, login_Screen.class));
                 mAuth.signOut();

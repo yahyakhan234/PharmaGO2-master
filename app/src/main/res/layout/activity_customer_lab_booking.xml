@@ -194,7 +194,8 @@
             android:textColor="#fff"
             app:backgroundTint="#00a599"
             tools:targetApi="m"
-            android:visibility="gone"
+
+            android:visibility="visible"
             />
     </RelativeLayout>
     <RelativeLayout
@@ -280,6 +281,36 @@
             android:layout_centerInParent="true"/>
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/complete_order_view"
+        android:animateLayoutChanges="true"
+        android:visibility="visible">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Order Completion has been requested, Do Not mark order as complete untill you receive your delivery"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/complete_order"
+                android:visibility="visible"
+                android:text="Mark Order As complete"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/primaryTheme"/>
+        </RelativeLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

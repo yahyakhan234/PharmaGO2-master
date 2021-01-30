@@ -3,6 +3,7 @@ package com.fyp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,13 +24,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.tiper.MaterialSpinner;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fyp.customer_lab_booking.HAS_TEST_BOOKED_KEY;
+import static com.fyp.customer_lab_booking.IS_TEST_ACCEPTED_KEY;
+import static com.fyp.generateComplaint.COUNT_KEY;
+
 public class signup extends AppCompatActivity {
 
+    private static final String COMPLETE_REQUESTED_KEY = "complete_requested";
+    private static final String IN_TIME_KEY ="in_time" ;
+    private static final String IS_ACCEPTED_KEY = "is_accepted";
+    private static final String IS_ORDERING_KEY ="is_ordering" ;
+    private static final String LAB_COMPLETE_REQUESTED = "lab_complete_requested";
+    private static final String RATING_KEY = "rating";
+    private static final String STATUS_KEY = "status";
+    private static final String ORDERS_KEY = "orders";
+    public static final String RATING_COUNT_KEY="rating_count";
+    public static final String TOTAL_RATING_KEY="total_rating";
     Button register_button;
     private static final String[] ITEMS = {"Patient", "Pharmacy", "Laboratory"};
     private FirebaseAuth mAuth;
@@ -39,6 +55,7 @@ public class signup extends AppCompatActivity {
     public static final String FULL_NAME_KEY = "Full Name";
     public static final String PHONE_KEY = "Phone Number";
     public String username;
+    ProgressDialog wait;
 
 
     private ArrayAdapter<String> adapter;
@@ -71,18 +88,35 @@ public class signup extends AppCompatActivity {
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                wait=ProgressDialog.show(signup.this,"Processing","Signing You up, Please Wait");
                 final String email = em.getEditText().getText().toString();
                 String password = pw.getEditText().getText().toString();
                  username = unm.getEditText().getText().toString();
                 String full_name= name.getEditText().getText().toString();
                 String phone = pnum.getEditText().getText().toString();
-                String selected_option= (String) materialSpinner.getSelectedItem();
+                final String selected_option= (String) materialSpinner.getSelectedItem();
                 final Map<String, Object> user = new HashMap<>();
                 user.put(USERNAME_KEY, username);
                 user.put(FULL_NAME_KEY, full_name);
                 user.put(EMAIL_KEY, email);
                 user.put(PHONE_KEY, phone);
                 user.put(USER_TYPE_KEY,selected_option);
+                user.put(RATING_KEY,"5");
+                user.put(RATING_COUNT_KEY,"0");
+                user.put(TOTAL_RATING_KEY,"0");
+                if (selected_option.equals("Patient")) {
+                    user.put(COMPLETE_REQUESTED_KEY, false);
+                    user.put(HAS_TEST_BOOKED_KEY, false);
+                    user.put(IN_TIME_KEY, false);
+                    user.put(IS_ACCEPTED_KEY, false);
+                    user.put(IS_ORDERING_KEY, false);
+                    user.put(IS_TEST_ACCEPTED_KEY, false);
+                    user.put(LAB_COMPLETE_REQUESTED, false);
+                    user.put(STATUS_KEY, "searching");
+                }
+                else if (selected_option.equals("Pharmacy")){
+                    user.put(ORDERS_KEY,"0");
+                }
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(signup.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -93,24 +127,85 @@ public class signup extends AppCompatActivity {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d("tag", "Added Successfully");
+
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
+
                                                     Log.w("tag", "Error adding document", e);
                                                 }
                                             });
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d("chk", "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(signup.this, "User Signed Up. Login Please",
-                                            Toast.LENGTH_SHORT).show();
+                                    final FirebaseUser user = mAuth.getCurrentUser();
+                                    final Map<String,Object> map=new HashMap<>();
+                                    map.put(COUNT_KEY,"0");
+                                    db.collection("users_complain_count").document(user.getUid()).set(map,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    });
+                                    switch (selected_option) {
+                                        case "Laboratory":
+                                        {
+                                            db.collection("lab_bookings").document(user.getEmail()).set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+
+                                                    db.collection("lab_orders_completed").document(user.getEmail()).set(map, SetOptions.merge())
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    wait.dismiss();
+                                                                    Toast.makeText(signup.this, "User Signed Up. Login Please",
+                                                                            Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                            break;
+                                    }
+                                        case "Pharmacy":
+                                            {
+                                            db.collection("pharma_orders").document(user.getUid()).set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    db.collection("pharma_orders_completed").document(user.getEmail()).set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            wait.dismiss();
+                                                            Toast.makeText(signup.this, "User Signed Up. Login Please",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            }); }
+                                            break;
+                                        case "Patient": {
+                                                db.collection("user_lab_orders_completed").document(user.getUid()).set(map,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                   db.collection("user_orders_completed").document(user.getUid()).set(map,SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                       @Override
+                                                       public void onSuccess(Void aVoid) {
+                                                           wait.dismiss();
+                                                           Toast.makeText(signup.this, "User Signed Up. Login Please",
+                                                                   Toast.LENGTH_SHORT).show();
+                                                       }
+                                                   });
+                                                    }
+                                                });
+                                            break;
+                                        }
+                                    }
                                 } else {
                                     // If sign in fails, display a message to the user.
+                                    wait.dismiss();
                                     Log.w("chk", "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(signup.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(signup.this, "Oops, Something went wrong, Are you sure those are correct inputs?.",
+                                            Toast.LENGTH_LONG).show();
 
                                 }
 

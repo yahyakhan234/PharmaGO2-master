@@ -7,111 +7,249 @@
     android:orientation="vertical"
     android:background="@drawable/background"
     tools:context=".dashboard_lab">
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="#00a599">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="Welcome Laboratory"
-            android:textColor="#fff"
-
-
-            android:textSize="30sp"
-
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-
-        android:background="@android:color/darker_gray"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
-
-        <ImageView
+        android:orientation="vertical"
+        android:id="@+id/browse"
+        android:visibility="visible">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/just_for_you" />
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="70dp"
-
-        android:background="@android:color/darker_gray"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/view_requested_bookings"
-            style="@android:style/Widget.Material.Button.Colored"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:padding="20dp"
-            android:text="View Requested Bookings"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:backgroundTint="#00a599"
-            tools:targetApi="m" />
-    </RelativeLayout>
-    <RelativeLayout
+            android:background="#00a599">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Welcome Laboratory"
+                android:textColor="#fff"
+
+
+                android:textSize="30sp"
+
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+
+            android:background="@android:color/darker_gray"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:id="@+id/bannerNews"
+                android:src="@drawable/pending_order" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginBottom="70dp"
+
+            android:background="@android:color/darker_gray"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/view_requested_bookings"
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="20dp"
+                android:text="View Requested Bookings"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:backgroundTint="#00a599"
+                tools:targetApi="m" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="OR"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                style="@android:style/Widget.Material.Button.Colored"
+                android:id="@+id/status_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:padding="19dp"
+                android:textColor="@color/white"
+                android:text="SET STATUS"
+                android:textSize="20sp"
+                app:backgroundTint="#00a599"
+                tools:targetApi="m" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="30dp">
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:id="@+id/in_progress_orders">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="In Progress Orders"
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:background="@color/primaryTheme"
+                android:textSize="30sp"
+                android:padding="20dp"
+                android:textStyle="bold"
+                />
+            <ProgressBar
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:indeterminate="true"
+                android:visibility="visible"
+                android:id="@+id/progress_bar"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="200dp"
 
-        <TextView
-            android:layout_width="wrap_content"
+                />
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="OR"
-            android:textColor="#000"
-            android:textSize="20sp" />
+            android:layout_gravity="center"
+            android:id="@+id/orders_container">
+            <TextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:text="No Orders In Progress"
+                android:id="@+id/no_orders"
+                android:textAlignment="center"/>
 
-    </RelativeLayout>
 
-    <RelativeLayout
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <com.google.android.material.button.MaterialButton
-            style="@android:style/Widget.Material.Button.Colored"
-            android:id="@+id/status_set"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/settings"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:padding="19dp"
-            android:textColor="@color/white"
-            android:text="SET STATUS"
-            android:textSize="20sp"
-            app:backgroundTint="#00a599"
-            tools:targetApi="m" />
-    </RelativeLayout>
+            android:padding="20dp"
+            android:background="#00a599"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Settings"
+                android:textColor="#fff"
 
 
+                android:textSize="40sp"
+
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/signout_button"
+                android:text="Sign Out"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:layout_centerHorizontal="true"
+                style="@android:style/Widget.Material.Button.Colored"
+                tools:targetApi="m"
+                app:backgroundTint="#00a599"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            >
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Location"
+                android:textSize="20sp"
+                android:id="@+id/get_location"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/primaryTheme"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/generate_complaint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="20sp"
+                android:backgroundTint="@color/primaryTheme"
+                android:text="View Complains"/>
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+            android:id="@+id/bottom_navigation_lab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"

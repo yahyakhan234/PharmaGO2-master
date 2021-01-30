@@ -40,8 +40,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/just_for_you"
-            android:scaleType="fitStart"
+            android:id="@+id/bannerNews"
+            android:src="@drawable/pending_order"
+            android:scaleType="center"
             />
 
     </RelativeLayout>
@@ -178,7 +179,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ongoing_lab_test"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"

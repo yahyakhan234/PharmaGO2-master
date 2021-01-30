@@ -11,8 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
+        <activity android:name=".order_completed_lab"></activity>
         <activity android:name=".customer_lab_booking" />
-
         <activity android:name=".lab_order_detail" />
         <activity android:name=".view_available_test" />
         <activity android:name=".classes.complaintDetail" />
@@ -72,13 +72,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".login_Screen" />
+
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.fyp.android.fileprovider"
@@ -92,8 +93,7 @@
         <receiver
             android:name=".booking_alarm"
             android:enabled="true"
-            android:exported="true"></receiver>
-
+            android:exported="true" />
         <receiver android:name=".delivery_alarm_manager">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -211,6 +211,7 @@ public class GenerateNotif {
             }
         });
     }
+
     public void sendNotificationToSinglePharmacist(String UID){
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -338,6 +339,21 @@ public class GenerateNotif {
                 String s=documentSnapshot.getString("token");
                 Log.d("Notif","Notification Sending");
                 sendNotifications(s,"Complete Request","Your order has been delivered. Please mark order as complete, Tap to view");
+            }
+        });
+    }
+
+    public void labOrderCompleteNotify(String UID) {
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+        usersRef.document(UID).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String s=documentSnapshot.getString("token");
+                Log.d("Notif","Notification Sending");
+                sendNotifications(s,"Lab Test Complete","Your Lab Test Results are here and order complete has been requested. Tap to view");
             }
         });
     }

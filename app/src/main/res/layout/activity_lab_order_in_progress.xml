@@ -61,7 +61,7 @@
 
                 <TextView
 
-                    android:id="@+id/tv_customer"
+                    android:id="@+id/test_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -73,7 +73,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="Price: 500"
+                    android:id="@+id/total"
+                    android:text="Price:"
                     app:counterEnabled="true"
                     android:textSize="20sp"
                     android:textColor="#000"
@@ -97,13 +98,14 @@
 
 
                 <TextView
+                    android:id="@+id/date_requested"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="10/5/2020"
-                    app:counterEnabled="true"
-                    android:textSize="20sp"
                     android:textColor="#000"
+                    android:textSize="20sp"
+                    app:counterEnabled="true"
                     app:hintTextColor="#000" />
 
 
@@ -127,6 +129,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="13:30"
                     app:counterEnabled="true"
+                    android:id="@+id/time_requested"
                     android:textSize="20sp"
                     android:textColor="#000"
                     app:hintTextColor="#000" />
@@ -135,29 +138,25 @@
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="Total:"
+                    android:text="Result In days:"
                     android:textColor="@android:color/background_dark"
-                    android:textSize="25sp"
-
-                    />
+                    android:textSize="20sp" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_alignParentEnd="true"
-                    android:text="500"
+                    android:text="13:30"
                     app:counterEnabled="true"
-                    android:textSize="25sp"
+                    android:id="@+id/result_in_days"
+                    android:textSize="20sp"
                     android:textColor="#000"
                     app:hintTextColor="#000" />
 
@@ -185,7 +184,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:padding="19dp"
-            android:text="Notify Patient"
+            android:text="Remind Patient of reservation"
             android:textSize="20sp"
             android:textColor="#fff"
             app:backgroundTint="#00a599"
@@ -201,7 +200,8 @@
             android:layout_alignParentLeft="true"
             android:layout_margin="20dp"
             android:padding="19dp"
-            android:text="Complete Order"
+            android:text="Complete order"
+            android:id="@+id/complete_order"
             android:textSize="15sp"
             android:textColor="#fff"
             app:backgroundTint="#00a599"
@@ -223,6 +223,47 @@
 
 
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/upload_results_view"
+            android:padding="20dp">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload Results"
+                android:id="@+id/upload_result"
+                android:textSize="20sp"
+                android:backgroundTint="@color/primaryTheme"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:padding="20dp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/select_file"
+                android:text="Select File"
+                android:backgroundTint="@color/primaryTheme"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Only PDF file allowed"
+                android:layout_toRightOf="@id/select_file"
+                android:layout_centerInParent="true"
+                android:id="@+id/file_selected"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 
@@ -231,20 +272,7 @@
         android:layout_height="wrap_content"
 
 
-        >
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            app:itemIconTint="#fff"
-            app:itemTextColor="#fff"
-            android:background="@color/primaryTheme"
-            app:menu="@menu/bottom_navigation_menu"
-            android:layout_alignParentBottom="true"/>
-
-
-    </RelativeLayout>
+        />
 
 
 

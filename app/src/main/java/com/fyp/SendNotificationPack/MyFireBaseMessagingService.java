@@ -78,7 +78,9 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         else if (title.equalsIgnoreCase("Accept Booking")){
 
 
-
+        }
+        else if(title.equalsIgnoreCase("Lab Test Complete")){
+            labTestCompleteNotify(title,message);
         }
         else {
             addNotification(title, message);
@@ -94,6 +96,25 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
 */
+    }
+
+    private void labTestCompleteNotify(String title, String message) {
+        Intent intent = new Intent(this, customer_lab_booking.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                .setSmallIcon(R.drawable.logo_splash)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+        Notification notification=builder.build();
+        notification.flags|=Notification.FLAG_INSISTENT;
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, notification);
     }
 
     private void orderCompletedNotify(String title, String message) {

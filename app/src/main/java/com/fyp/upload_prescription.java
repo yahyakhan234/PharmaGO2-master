@@ -64,7 +64,6 @@ public class upload_prescription extends AppCompatActivity {
     static final int REQUEST_PICTURE_CAPTURE = 1;
     private ImageView image;
     private String pictureFilePath;
-    private FirebaseStorage firebaseStorage;
     private String deviceIdentifier;
 
     Button upload_button;

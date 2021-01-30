@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 
 public class customer_book_test extends AppCompatActivity {
@@ -47,9 +49,11 @@ public class customer_book_test extends AppCompatActivity {
     public static final String TEST_NAME_KEY="name";
     public static final String TEST_DETAILS_KEY="details";
     public static final String SIDENOTE_KEY="side_note";
+    public static final String ORDERID_KEY="orderID";
+    public static final String TEST_UPLOADED_KEY="test_uploaded";
 
     private Map<String,Object> order_map;
-    String date,time,sdtf,testID,testName,testDetails;
+    String date,time,sdtf,testID,testName,testDetails,UID;
     MaterialButton proceed,dateButton,timeButton;
     TextView dateTextView,timeTextView;
     FirebaseAuth mAuth;
@@ -60,6 +64,8 @@ public class customer_book_test extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_book_test);
+        SharedPreferences sharedPreferences=getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+        final String FullName=sharedPreferences.getString("NAME","");
         testID=getIntent().getStringExtra("testID");
         proceed=findViewById(R.id.search_deliverer);
         dateButton=findViewById(R.id.date_button);
@@ -68,6 +74,7 @@ public class customer_book_test extends AppCompatActivity {
         timeTextView=findViewById(R.id.time_text_view);
         sidenotes=findViewById(R.id.side_note);
         db=FirebaseFirestore.getInstance();
+
         CalendarConstraints.Builder calendarConstraintBuilder = new CalendarConstraints.Builder();
         calendarConstraintBuilder.setValidator(DateValidatorPointForward.now());
         mAuth=FirebaseAuth.getInstance();
@@ -92,7 +99,7 @@ public class customer_book_test extends AppCompatActivity {
                             @SuppressLint("SetTextI18n")
                             @Override
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                time=sHour + "/" + sMinute;
+                                time=sHour + ":" + sMinute;
                                 timeTextView.setText(SELECTED_TIME_TEXT + sHour+":"+sMinute);
                             }
                         }, hour, minutes, false)
@@ -130,36 +137,49 @@ public class customer_book_test extends AppCompatActivity {
                 }
                 else
                 {
-                    order_map.put(lab_price_order.UID_KEY, Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
-                    order_map.put(lab_price_order.DATE_REQUESTED_KEY,date);
-                    order_map.put(lab_price_order.TIME_REQUESTED_KEY,time);
-                    order_map.put(lab_price_order.UEMAIL_KEY,mAuth.getCurrentUser().getEmail());
-                    order_map.put(SIDENOTE_KEY,sidenotes.getEditText().getText().toString().trim());
-                    @SuppressLint("SimpleDateFormat")
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    String dateString = formatter.format(new Date(System.currentTimeMillis()));
-                    order_map.put(TIMESTAMP_KEY,dateString);
-                    order_map.put(lab_price_order.TEST_TYPE_NAME_KEY,testName);
-                    order_map.put(lab_price_order.TEST_TYPE_KEY,testID);
-                    db.collection("orders_lab").document(mAuth.getCurrentUser().getEmail()).set(order_map)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    db.collection("entityCount").document("TotalOrders").get(Source.SERVER)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    wait.dismiss();
-                                    new AlertDialog.Builder(customer_book_test.this)
-                                    .setIcon(R.drawable.logo_splash)
-                                    .setTitle("Done!")
-                                    .setMessage("Your Order Has been placed, you will be informed when your order is accepted")
-                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            finish();
-                                        }
-                                    })
-                                    .show();
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    String orderID=documentSnapshot.getString("latest_order_number");
+                                    orderID=Integer.toString(Integer.parseInt(orderID)+1);
+                                    order_map.put(ORDERID_KEY,orderID);
+                                    order_map.put("Name",FullName);
+                                    order_map.put(lab_price_order.UID_KEY, Objects.requireNonNull(mAuth.getCurrentUser()).getUid());
+                                    order_map.put(lab_price_order.DATE_REQUESTED_KEY,date);
+                                    order_map.put(lab_price_order.TIME_REQUESTED_KEY,time);
+                                    order_map.put(lab_price_order.UEMAIL_KEY,mAuth.getCurrentUser().getEmail());
+                                    order_map.put(SIDENOTE_KEY,sidenotes.getEditText().getText().toString().trim());
+                                    @SuppressLint("SimpleDateFormat")
+                                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                                    String dateString = formatter.format(new Date(System.currentTimeMillis()));
+                                    order_map.put(TIMESTAMP_KEY,dateString);
+                                    order_map.put(lab_price_order.TEST_TYPE_NAME_KEY,testName);
+                                    order_map.put(lab_price_order.TEST_TYPE_KEY,testID);
+                                    order_map.put(TEST_UPLOADED_KEY,false);
+                                    db.collection("orders_lab").document(mAuth.getCurrentUser().getEmail()).set(order_map)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Map<String,Object> map=new HashMap<>();
+                                                    map.put(customer_lab_booking.HAS_TEST_BOOKED_KEY,true);
+                                                    db.collection("users").document(mAuth.getCurrentUser().getEmail()).set(map, SetOptions.merge());
+                                                    wait.dismiss();
+                                                    new AlertDialog.Builder(customer_book_test.this)
+                                                            .setIcon(R.drawable.logo_splash)
+                                                            .setTitle("Done!")
+                                                            .setMessage("Your Order Has been placed, you will be informed when your order is accepted")
+                                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    finish();
+                                                                }
+                                                            })
+                                                            .show();
+                                                }
+                                            });
                                 }
                             });
-                    Toast.makeText(customer_book_test.this,"good",Toast.LENGTH_SHORT).show();
                 }
              //   startActivity(new Intent(customer_book_test.this, searching_lab.class));
                // finish();
@@ -186,7 +206,7 @@ public class customer_book_test extends AppCompatActivity {
     {
         //String date_ = date;
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy/kk/mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy/kk:mm");
         try
         {
             Date mDate = sdf.parse(date);

@@ -119,7 +119,6 @@ public class live_chat extends AppCompatActivity {
         super.onResume();
 
         db=FirebaseFirestore.getInstance();
-
             db.collection("live_chat")
                     .document(liveChatID)
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -127,6 +126,7 @@ public class live_chat extends AppCompatActivity {
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                    ChatView chatView=findViewById(R.id.chat_view);
                     if(updateCount!=Integer.parseInt(documentSnapshot.getString("count"))){
+
                         assert documentSnapshot != null;
                         Map<String,Object> map=null;
                         Map<String,Object> message = null;

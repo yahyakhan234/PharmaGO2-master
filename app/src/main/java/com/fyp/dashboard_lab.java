@@ -72,7 +72,6 @@ public class dashboard_lab extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         final FirebaseUser firebaseUser=mAuth.getCurrentUser();
 
-        MaterialButton status_button  = findViewById(R.id.status_set);
         MaterialButton view_tests_button=findViewById(R.id.view_requested_bookings);
         get_location=findViewById(R.id.get_location);
         setBannerNews();
@@ -81,14 +80,6 @@ public class dashboard_lab extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(dashboard_lab.this,buy_requests_lab.class));
             }
-        });
-        status_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(dashboard_lab.this, lab_status.class));
-                finish();
-            }
-
         });
         returnLocation();
         bottomNavigationMenu=findViewById(R.id.bottom_navigation_lab);

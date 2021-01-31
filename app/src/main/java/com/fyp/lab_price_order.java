@@ -131,6 +131,11 @@ public class lab_price_order extends AppCompatActivity {
                                                                             map.put("PID",mAuth.getCurrentUser().getUid());
                                                                             map.put("UID",UID);
                                                                             map.put("count","0");
+                                                                            Map<String,Object> message=new HashMap<>();
+                                                                            message.put("message","Start Of Conversation");
+                                                                            message.put("type","user");
+                                                                            map.put("message0",message);
+
                                                                             db.collection("live_chat")
                                                                                     .document("LC"+orderID)
                                                                                     .set(map);

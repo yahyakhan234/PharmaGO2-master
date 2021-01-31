@@ -119,10 +119,15 @@ public class customer_custom_request extends AppCompatActivity {
                             String s=documentSnapshot.getString("latest_order_number");
                             s=Integer.toString(Integer.parseInt(s)+1);
                             medicine_order.put(ORDERID_KEY,s);
+                            final String finalOrderID=s;
                             db.collection("orders").document(email)
                                     .set(medicine_order).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    Map<String,Object> map1=new HashMap<>();
+                                    map1.put("latest_order_number", finalOrderID);
+                                    db.collection("entityCount").document("TotalOrders").set(map1);
+
                                     GenerateNotif g=new GenerateNotif();
                                     g.sendNotificationToAllUsers();
                                     Map<String,Object> setorder=new HashMap<>();

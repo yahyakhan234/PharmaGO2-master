@@ -18,6 +18,8 @@ import androidx.core.content.ContextCompat;
 import com.fyp.Buy_Requests;
 import com.fyp.customer_lab_booking;
 import com.fyp.customer_order_processed;
+import com.fyp.dashboard;
+import com.fyp.dashboard_lab;
 import com.fyp.dashboard_pharmacy;
 import com.fyp.five_mins_alarm_manager;
 import com.fyp.live_chat;
@@ -39,11 +41,11 @@ import java.util.Set;
 
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
     String title,message;
-    //public static final long HOUR_TIME=3600000;       //actual
-    //public static final long FIVE_MINUTE_TIME=300000; //actual
+    public static final long HOUR_TIME=3600000;       //actual
+    public static final long FIVE_MINUTE_TIME=300000; //actual
 
-    public static final long HOUR_TIME=10000;   //test
-    public static final long FIVE_MINUTE_TIME=10000; //test
+   // public static final long HOUR_TIME=10000;   //test
+    //public static final long FIVE_MINUTE_TIME=10000; //test
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -77,6 +79,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         }
         else if (title.equalsIgnoreCase("Accept Booking")){
 
+            acceptBooking(title,message);
 
         }
         else if(title.equalsIgnoreCase("Lab Test Complete")){
@@ -118,14 +121,23 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     }
 
     private void orderCompletedNotify(String title, String message) {
-        Intent intent = new Intent(this, dashboard_pharmacy.class);
+        final SharedPreferences sharedPreferences = getSharedPreferences("USER_DETAIL", MODE_PRIVATE);
+        Class cls= dashboard.class;
+        String FullName = sharedPreferences.getString("USER_TYPE", "");
+        if (FullName.equals("Laboratory")){
+             cls=dashboard_lab.class;
+        }
+        else if (FullName.equals("Pharmacy")){
+             cls=dashboard_pharmacy.class;
+        }
+        Intent intent = new Intent(this, cls);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
                 .setSmallIcon(R.drawable.logo_splash)
-                .setContentTitle("New Buy Request")
-                .setContentText("New Buy Request From "+message+".Tap To View")
+                .setContentTitle(title)
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)

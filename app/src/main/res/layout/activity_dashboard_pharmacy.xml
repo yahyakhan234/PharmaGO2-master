@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/browse"
     android:orientation="vertical"
-    android:visibility="gone">
+    android:visibility="visible">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,8 +45,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/just_for_you" />
+            android:id="@+id/bannerNews"
+            android:scaleType="center"
+            android:src="@drawable/pending_order" />
 
     </RelativeLayout>
 
@@ -77,50 +78,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="30dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="OR"
-            android:textColor="#000"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
+        android:padding="30dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <com.google.android.material.button.MaterialButton
-            style="@android:style/Widget.Material.Button.Colored"
-            android:id="@+id/status_set"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:padding="19dp"
-            android:text="SET STATUS"
-            android:textSize="20sp"
-            app:backgroundTint="#00a599"
-            tools:targetApi="m" />
-    </RelativeLayout>
+        android:padding="10dp"/>
 </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/settings"
-        android:visibility="visible">
+        android:visibility="gone">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:background="#00a599"
             >
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -128,12 +104,8 @@
                 android:layout_centerHorizontal="true"
                 android:text="Settings"
                 android:textColor="#fff"
-
-
                 android:textSize="40sp"
-
                 android:textStyle="bold" />
-
         </RelativeLayout>
 
         <RelativeLayout
@@ -182,6 +154,115 @@
                 tools:targetApi="m"
                 app:backgroundTint="#00a599"/>
         </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/profile"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="#00a599"
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Personal Detail"
+                android:textColor="#fff"
+                android:textSize="30sp"
+
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_name"
+                android:text="Name:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_username"
+            android:text="Username:"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_email"
+                android:text="Email:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_phone"
+                android:text="Phone:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Rating"
+            android:id="@+id/rating_label"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rating_bar"
+                    android:layout_margin="10dp"
+                    android:numStars="5"
+                    android:isIndicator="true"
+                    android:layout_centerInParent="true"
+                    android:stepSize="1"
+                    android:progressTint="@color/primaryTheme"
+                    android:progressBackgroundTint="@color/main_color_gray"
+                    />
+            </RelativeLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -235,11 +316,88 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:isScrollContainer="true"
+        android:id="@+id/completed_orders">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="600dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:isScrollContainer="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:background="@color/primaryTheme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Completed Orders"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/orders_container_done">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ProgressBar
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:indeterminate="true"
+                            android:visibility="visible"
+                            android:id="@+id/progress_bar_done"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="200dp"
+
+                            />
+                    </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="30dp"
+                        android:text="No Completed Orders"
+                        android:id="@+id/no_orders_done"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear Pervious Orders"
+                android:layout_centerInParent="true"
+                android:id="@+id/clear_orders"
+                android:padding="10dp"
+                android:backgroundTint="@color/primaryTheme"/>
+        </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
->
+        android:layout_height="wrap_content">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_pharmacy"

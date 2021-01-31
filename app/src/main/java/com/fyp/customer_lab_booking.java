@@ -385,6 +385,7 @@ public class customer_lab_booking extends AppCompatActivity {
                             cancel_button_disabled.setVisibility(View.VISIBLE);
                             accept_button.setVisibility(View.GONE);
                             liveChatButton.setVisibility(View.VISIBLE);
+
                             db.collection(LAB_ACCEPTED_BOOKINGS_KEY).document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER)
                                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                         @Override
@@ -407,7 +408,13 @@ public class customer_lab_booking extends AppCompatActivity {
                                                             });
                                                         }
                                                     });
-
+                                            if (documentSnapshot.getBoolean("test_uploaded")){
+                                                findViewById(R.id.download_result).setVisibility(View.VISIBLE);
+                                            }
+                                            else
+                                            {
+                                                findViewById(R.id.download_result).setVisibility(View.GONE);
+                                            }
                                             testName.setText(documentSnapshot.getString(lab_price_order.TEST_TYPE_NAME_KEY));
                                             timeRequestedTV.setText(documentSnapshot.getString(lab_price_order.TIME_REQUESTED_KEY));
                                             dateRequestedTV.setText(documentSnapshot.getString(lab_price_order.DATE_REQUESTED_KEY));
@@ -452,7 +459,13 @@ public class customer_lab_booking extends AppCompatActivity {
                                                             });
                                                         }
                                                     });
-
+                                            if (documentSnapshot.getBoolean("test_uploaded")){
+                                                findViewById(R.id.download_result).setVisibility(View.VISIBLE);
+                                            }
+                                            else
+                                            {
+                                                findViewById(R.id.download_result).setVisibility(View.GONE);
+                                            }
                                             testName.setText(documentSnapshot.getString(lab_price_order.TEST_TYPE_NAME_KEY));
                                             timeRequestedTV.setText(documentSnapshot.getString(lab_price_order.TIME_REQUESTED_KEY));
                                             dateRequestedTV.setText(documentSnapshot.getString(lab_price_order.DATE_REQUESTED_KEY));

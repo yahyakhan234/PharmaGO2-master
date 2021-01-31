@@ -157,13 +157,21 @@ public class customer_book_test extends AppCompatActivity {
                                     order_map.put(lab_price_order.TEST_TYPE_NAME_KEY,testName);
                                     order_map.put(lab_price_order.TEST_TYPE_KEY,testID);
                                     order_map.put(TEST_UPLOADED_KEY,false);
+                                    final String finalOrderID = orderID;
                                     db.collection("orders_lab").document(mAuth.getCurrentUser().getEmail()).set(order_map)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Map<String,Object> map=new HashMap<>();
                                                     map.put(customer_lab_booking.HAS_TEST_BOOKED_KEY,true);
-                                                    db.collection("users").document(mAuth.getCurrentUser().getEmail()).set(map, SetOptions.merge());
+                                                    db.collection("users").document(mAuth.getCurrentUser().getEmail()).set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Map<String,Object> map1=new HashMap<>();
+                                                            map1.put("latest_order_number", finalOrderID);
+                                                            db.collection("entityCount").document("TotalOrders").set(map1);
+                                                        }
+                                                    });
                                                     wait.dismiss();
                                                     new AlertDialog.Builder(customer_book_test.this)
                                                             .setIcon(R.drawable.logo_splash)

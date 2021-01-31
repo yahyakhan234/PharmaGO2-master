@@ -7,7 +7,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -204,6 +206,17 @@ public class lab_order_in_progress extends AppCompatActivity {
         db.collection("users").document(uemail).set(map, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                new AlertDialog.Builder(lab_order_in_progress.this)
+                        .setTitle("Done")
+                        .setIcon(R.drawable.logo_splash)
+                        .setMessage("User Notified, You will be informed when user marks order as complete")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                                startActivity(new Intent(lab_order_in_progress.this,dashboard_lab.class));
+                            }
+                        });
                 new GenerateNotif().labOrderCompleteNotify(UID);
             }
         });

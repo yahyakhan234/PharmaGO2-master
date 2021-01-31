@@ -40,6 +40,7 @@ public class login_Screen extends AppCompatActivity {
 
     String email;
     String password;
+    boolean is_deleted;
     private static final String[] ITEMS = {"Patient", "Pharmacy", "Laboratory"};
     private FirebaseAuth mAuth;
     String name;
@@ -101,6 +102,7 @@ public class login_Screen extends AppCompatActivity {
             public void onClick(View v) {
 
 
+
                 String email = em.getEditText().getText().toString();
                 String password = pw.getEditText().getText().toString();
                 boolean reject = false;
@@ -116,12 +118,11 @@ public class login_Screen extends AppCompatActivity {
                             .addOnCompleteListener(login_Screen.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    wait.dismiss();
+
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
 
 
-                                        Toast.makeText(login_Screen.this, "Success", Toast.LENGTH_LONG).show();
                                         FirebaseUser user = mAuth.getCurrentUser();
 
                                         if (user != null) {
@@ -135,7 +136,14 @@ public class login_Screen extends AppCompatActivity {
 
                                                     SharedPreferences.Editor editPrefs;
                                                     editPrefs = sharedPreferences.edit();
+                                                    if (documentSnapshot.getBoolean("is_deleted")){
+                                                        is_deleted=true;
+                                                        mAuth.signOut();
+                                                    }
+                                                    else {
+                                                        is_deleted=false;
 
+                                                    }
                                                     name = documentSnapshot.getString("Full Name");
                                                     String type = documentSnapshot.getString("User Type");
                                                     Log.d("NameTag", ":" + name);
@@ -144,6 +152,17 @@ public class login_Screen extends AppCompatActivity {
                                                     editPrefs.putString("NAME", name);
                                                     editPrefs.putString("USER_TYPE", type);
                                                     editPrefs.commit();
+                                                    wait.dismiss();
+                                                    if (!is_deleted) {
+
+                                                        Toast.makeText(login_Screen.this, "Success", Toast.LENGTH_LONG).show();
+                                                        finish();
+                                                        startActivity(new Intent(login_Screen.this, splash_screen.class));
+                                                    }
+                                                    else {
+
+                                                        Toast.makeText(login_Screen.this, "Oops, looks like your account was deleted or suspended, Contact Support for further details", Toast.LENGTH_LONG).show();
+                                                    }
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
@@ -154,8 +173,6 @@ public class login_Screen extends AppCompatActivity {
 
 
                                         }
-                                        finish();
-                                        startActivity(new Intent(login_Screen.this,splash_screen.class));
                                         //  startActivity(new Intent(login_Screen.this, dashboard.class));
 
                                     } else {
@@ -163,7 +180,7 @@ public class login_Screen extends AppCompatActivity {
                                         Log.w("chk", "signInWithEmail:failure", task.getException());
                                         Toast.makeText(login_Screen.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
-                                        updateUI(null);
+                                        wait.dismiss();
                                     }
 
 

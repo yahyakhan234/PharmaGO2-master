@@ -3,12 +3,12 @@
     <item android:title="Main"
         android:id="@+id/bottomNavigationBrowse"
         android:icon="@drawable/location_vector"/>
-    <item android:title="Completed"
+    <item android:title="Completed "
         android:id="@+id/bottomNavigationCompleted"
         android:icon="@drawable/completed_vector"/>
-    <item android:title="pending"
-        android:id="@+id/bottomNavigationProgress"
-        android:icon="@drawable/in_progress_icon"/>
+    <item android:title="Lab Tests"
+        android:id="@+id/bottomNavigationLab"
+        android:icon="@drawable/lab_tests_vector"/>
     <item android:title="profile"
         android:id="@+id/bottomNavigationProfile"
         android:icon="@drawable/profile_vector"/>

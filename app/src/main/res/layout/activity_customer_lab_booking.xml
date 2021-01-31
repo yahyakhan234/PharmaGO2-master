@@ -195,7 +195,7 @@
             app:backgroundTint="#00a599"
             tools:targetApi="m"
 
-            android:visibility="visible"
+            android:visibility="gone"
             />
     </RelativeLayout>
     <RelativeLayout

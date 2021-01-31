@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +78,9 @@ public class dashboard extends AppCompatActivity
     double latitude;
     FirebaseFirestore db;
     private File prescription;
+    TextView nameTV,usernameTV,phoneTV,emailTV;
+    RatingBar ratingBar;
+
 
 
     @Override
@@ -101,6 +105,7 @@ public class dashboard extends AppCompatActivity
         generateComplaint=findViewById(R.id.generate_complaint);
         ongoing_lab_test=findViewById(R.id.ongoing_lab_test);
         setBannerNews();
+        inflateProfile();
         ongoing_lab_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +120,8 @@ public class dashboard extends AppCompatActivity
         });
         inflateCompletedOrders();
         inflateTests();
+        inflateCompleteLabOrders();
+
         String FullName=sharedPreferences.getString("NAME","");
         welcome.setText("Welcome "+FullName);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE}, 1);
@@ -123,6 +130,12 @@ public class dashboard extends AppCompatActivity
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.getBoolean("is_deleted")) {
+                    mAuth.signOut();
+                    Toast.makeText(dashboard.this,"Please Login Again",Toast.LENGTH_LONG).show();
+                    finish();
+                    startActivity(new Intent(dashboard.this,login_Screen.class));
+                }
                 if(documentSnapshot.getBoolean("is_ordering"))
                 {
                     loading_layout.setVisibility(View.GONE);
@@ -208,6 +221,7 @@ public class dashboard extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 returnLocation();
+                Toast.makeText(dashboard.this,"Location Updated",Toast.LENGTH_SHORT).show();
             }
         });
         bottomNavigationMenu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -218,6 +232,8 @@ public class dashboard extends AppCompatActivity
                     L1.setVisibility(View.GONE);
                     LinearLayout L = findViewById(R.id.settings);
                     L.setVisibility(View.VISIBLE);
+                    findViewById(R.id.completed_orders_lab).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
                     findViewById(R.id.completed_orders).setVisibility(View.GONE);
                     return true;
                 }
@@ -227,20 +243,45 @@ public class dashboard extends AppCompatActivity
                     LinearLayout L = findViewById(R.id.browse);
                     L.setVisibility(View.VISIBLE);
                     findViewById(R.id.completed_orders).setVisibility(View.GONE);
-
-
-
+                    findViewById(R.id.profile).setVisibility(View.GONE);
+                    findViewById(R.id.completed_orders_lab).setVisibility(View.GONE);
 
                     return true;
                 }
+
                 if (item.getItemId() == R.id.bottomNavigationCompleted) {
                     LinearLayout L1=findViewById(R.id.settings);
                     L1.setVisibility(View.GONE);
                     LinearLayout L = findViewById(R.id.browse);
                     L.setVisibility(View.GONE);
                     findViewById(R.id.completed_orders).setVisibility(View.VISIBLE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
 
 
+                    findViewById(R.id.completed_orders_lab).setVisibility(View.GONE);
+
+                    return true;
+                }
+
+                if (item.getItemId() == R.id.bottomNavigationLab) {
+                    LinearLayout L1=findViewById(R.id.settings);
+                    L1.setVisibility(View.GONE);
+                    LinearLayout L = findViewById(R.id.browse);
+                    L.setVisibility(View.GONE);
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
+                    findViewById(R.id.completed_orders_lab).setVisibility(View.VISIBLE);
+                    return true;
+                }
+                if (item.getItemId() == R.id.bottomNavigationProfile) {
+                    LinearLayout L1=findViewById(R.id.settings);
+                    L1.setVisibility(View.GONE);
+                    LinearLayout L = findViewById(R.id.browse);
+                    L.setVisibility(View.GONE);
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.VISIBLE);
+
+                    findViewById(R.id.completed_orders_lab).setVisibility(View.GONE);
 
                     return true;
                 }
@@ -379,6 +420,51 @@ public class dashboard extends AppCompatActivity
         });
 
     }
+    void inflateCompleteLabOrders(){
+
+        db.collection("user_lab_orders_completed").document(mAuth.getCurrentUser().getUid()).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                findViewById(R.id.progress_bar_lab).setVisibility(View.GONE);
+                if (!documentSnapshot.getString("count").equals("0")) {
+                    TextView tv=findViewById(R.id.no_orders_lab);
+                    tv.setVisibility(View.GONE);
+                    for (int i = 1; i <= Integer.parseInt(documentSnapshot.getString("count")); i++) {
+                        LayoutInflater l = LayoutInflater.from(dashboard.this);
+                        View v = l.inflate(R.layout.in_progress_orders_resource, null);
+                        LinearLayout parent = (LinearLayout) findViewById(R.id.orders_container_lab);
+                        parent.addView(v);
+                        String stringText = "Order ID: " + documentSnapshot.getString("order" + i);
+                        TextView textView = findViewById(R.id.tv_customer);
+                        textView.setText(stringText);
+                        textView.setId(Integer.parseInt(Integer.toString(TVID) + i));
+                        textView = findViewById(R.id.email_hidden);
+                        textView.setText(documentSnapshot.getString("order" + i));
+                        textView.setId(Integer.parseInt(Integer.toString(EMAILID) + i));
+                        MaterialButton mButton = findViewById(R.id.details);
+                        mButton.setId(Integer.parseInt(Integer.toString(BUTTONID) + i));
+                        mButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TextView t = findViewById(Integer.parseInt(
+                                        EMAILID + String.valueOf(Integer.toString(v.getId())
+                                                .charAt(Integer.toString(v.getId()).length() - 1))));
+                                startActivity(new Intent(dashboard.this, order_completed_lab.class)
+                                        .putExtra("orderID", t.getText()));
+                                Log.d("tag", "email:" + t.getText());
+                            }
+                        });
+                    }
+                }
+                else{
+                    TextView textView=findViewById(R.id.no_orders_lab);
+                    textView.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+    }
     void inflateTests(){
 
         db.collection("entityCount").document("lab_tests").get(Source.SERVER)
@@ -435,6 +521,24 @@ public class dashboard extends AppCompatActivity
         }
     }
 
+    void inflateProfile(){
+        nameTV=findViewById(R.id.profile_name);
+        emailTV=findViewById(R.id.profile_email);
+        ratingBar=findViewById(R.id.rating_bar);
+        usernameTV=findViewById(R.id.profile_username);
+        phoneTV=findViewById(R.id.profile_phone);
+        db=FirebaseFirestore.getInstance();
+        db.collection("users").document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                nameTV.setText("Name: "+documentSnapshot.getString("Full Name"));
+                emailTV.setText("Email: "+mAuth.getCurrentUser().getEmail());
+                ratingBar.setRating(Long.parseLong(documentSnapshot.getString("rating")));
+                usernameTV.setText("Username: "+documentSnapshot.getString("Username"));
+                phoneTV.setText("Phone: "+documentSnapshot.getString("Phone Number"));
+            }
+        });
+    }
 
 }
 

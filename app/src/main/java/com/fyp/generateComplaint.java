@@ -38,7 +38,7 @@ public class generateComplaint extends AppCompatActivity {
     public static final String UEMAIL_KEY="uemail";
     public static final String COMPLAIN_ID_KEY="complainID";
     public static final String COUNT_KEY="count";
-
+    private static final String CID_KEY ="CID" ;
 
 
     boolean is_solved;
@@ -123,6 +123,7 @@ public class generateComplaint extends AppCompatActivity {
                                                     complain.put(SUBJECT_KEY,subject);
                                                     complain.put(TIMESTAMP_KEY,timeStamp);
                                                     complain.put(UEMAIL_KEY,uemail);
+                                                    complain.put(CID_KEY,"C"+newComplNum);
 
                                                      db.collection("complains").document("C"+newComplNum).set(complain)
                                                              .addOnSuccessListener(new OnSuccessListener<Void>() {

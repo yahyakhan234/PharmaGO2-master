@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Welcome XYZ"
+            android:text="Welcome"
             android:id="@+id/welcome_text"
             android:textColor="#fff"
             android:textSize="25sp"
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:layout_width="150dp"
@@ -117,7 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/new_order_cluster"
         >
 
@@ -442,6 +442,205 @@
     </RelativeLayout>
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/completed_orders_lab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryTheme"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Completed Lab Tests"
+                android:textColor="#fff"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/orders_container_lab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ProgressBar
+                            android:id="@+id/progress_bar_lab"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="200dp"
+                            android:indeterminate="true"
+                            android:visibility="visible"
+
+                            />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/no_orders_lab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="No Completed Orders"
+                        android:textAlignment="center"
+                        android:textSize="30dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clear_orders_lab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:backgroundTint="@color/primaryTheme"
+                android:padding="10dp"
+                android:text="Clear Pervious Orders" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/profile"
+        android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:background="#00a599"
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="Personal Detail"
+                android:textColor="#fff"
+                android:textSize="30sp"
+
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="30dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_name"
+                android:text="Name:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_username"
+                android:text="Username:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_email"
+                android:text="Email:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_phone"
+                android:text="Phone:"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Rating"
+                android:id="@+id/rating_label"
+                android:layout_centerInParent="true"
+                android:textSize="20sp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rating_bar"
+                android:layout_margin="10dp"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:layout_centerInParent="true"
+                android:stepSize="1"
+                android:progressTint="@color/primaryTheme"
+                android:progressBackgroundTint="@color/main_color_gray"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -455,7 +654,7 @@
             app:itemIconTint="#fff"
             app:itemTextColor="#fff"
             android:background="@color/primaryTheme"
-            app:menu="@menu/bottom_navigation_menu" />
+            app:menu="@menu/bottom_navigation_menu_patient" />
 
 
 

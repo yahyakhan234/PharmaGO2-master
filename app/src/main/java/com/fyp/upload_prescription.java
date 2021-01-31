@@ -129,11 +129,16 @@ public class upload_prescription extends AppCompatActivity {
                             final String orderid=s;
                             medicine_order.put(ORDERID_KEY,s);
                             assert email != null;
+                            final String finalOrderID=s;
                             db.collection("orders")
                                     .document(email)
                                     .set(medicine_order).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    Map<String,Object> map1=new HashMap<>();
+                                    map1.put("latest_order_number", finalOrderID);
+                                    db.collection("entityCount").document("TotalOrders").set(map1);
+
                                     GenerateNotif g=new GenerateNotif();
                                     g.sendNotificationToAllUsers();
                                     Map<String,Object> setorder=new HashMap<>();

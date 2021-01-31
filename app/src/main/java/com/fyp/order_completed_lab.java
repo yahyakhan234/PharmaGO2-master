@@ -96,7 +96,7 @@ public class order_completed_lab extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                 db.collection("users")
-                                                                        .document(Objects.requireNonNull(documentSnapshot.getString("pemail")))
+                                                                        .document(Objects.requireNonNull(documentSnapshot.getString("uemail")))
                                                                         .get(Source.SERVER)
                                                                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                                             @Override

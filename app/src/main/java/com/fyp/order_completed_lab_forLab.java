@@ -7,13 +7,10 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,27 +32,24 @@ import java.util.Objects;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
-public class order_completed_lab extends AppCompatActivity {
-    public static final String MED_ID = "100";
-    public static final String PRICE_ID = "101";
+public class order_completed_lab_forLab extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     String orderID, s;
     TextView med, price;
     RatingBar ratingBar;
-    String pid,email;
     int rate;
     TextView timeRequestedTV,dateRequestedTV,totalTV,testName,resultTV;
 
-    MaterialButton setRating, setRatingDisabled, downloadResultButton,labDetailsButton;
+    MaterialButton setRating, setRatingDisabled, downloadResultButton;
 
     StorageReference storageReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_completed_lab);
-        timeRequestedTV=findViewById(R.id.time_requested);
+        setContentView(R.layout.activity_order_completed_lab_for_lab); timeRequestedTV=findViewById(R.id.time_requested);
         testName=findViewById(R.id.test_type);
         dateRequestedTV=findViewById(R.id.date_requested);
         totalTV=findViewById(R.id.total);
@@ -73,27 +67,20 @@ public class order_completed_lab extends AppCompatActivity {
                 download();
             }
         });
-        labDetailsButton=findViewById(R.id.lab_details_button);
-        labDetailsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(order_completed_lab.this,pharmacy_details.class).putExtra("email",email).putExtra("uid",pid));
-            }
-        });
         setRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("rating", Double.toString(ratingBar.getRating()));
                 rate = (int) ratingBar.getRating();
-                new AlertDialog.Builder(order_completed_lab.this)
+                new AlertDialog.Builder(order_completed_lab_forLab.this)
                         .setIcon(R.drawable.logo_splash)
                         .setMessage("Are you sure you want to give rating of " + rate)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Map<String, Object> m = new HashMap<>();
-                                m.put("lab_rating", "" + rate);
-                                m.put("lab_rated", true);
+                                m.put("user_rating", "" + rate);
+                                m.put("user_rated", true);
                                 db.collection("lab_tests_completed").document(orderID).set(m, SetOptions.merge())
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
@@ -104,7 +91,7 @@ public class order_completed_lab extends AppCompatActivity {
                                                             @Override
                                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                                 db.collection("users")
-                                                                        .document(Objects.requireNonNull(documentSnapshot.getString("pemail")))
+                                                                        .document(Objects.requireNonNull(documentSnapshot.getString("uemail")))
                                                                         .get(Source.SERVER)
                                                                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                                             @Override
@@ -152,14 +139,12 @@ public class order_completed_lab extends AppCompatActivity {
                 dateRequestedTV.setText(documentSnapshot.getString(lab_price_order.DATE_REQUESTED_KEY));
                 totalTV.setText(documentSnapshot.getString(lab_price_order.TOTAL_KEY));
                 orderID=documentSnapshot.getString("orderID");
-                pid=documentSnapshot.getString("PID");
-                email=documentSnapshot.getString("pemail");
 
 
-                if (documentSnapshot.getBoolean("lab_rated") != null) {
+                if (documentSnapshot.getBoolean("user_rated") != null) {
                     //noinspection ConstantConditions
-                    if (documentSnapshot.getBoolean("lab_rated")) {
-                        ratingBar.setRating(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getString("lab_rating"))));
+                    if (documentSnapshot.getBoolean("user_rated")) {
+                        ratingBar.setRating(Integer.parseInt(Objects.requireNonNull(documentSnapshot.getString("user_rating"))));
                         ratingBar.setIsIndicator(true);
                     } else {
                         setRatingDisabled.setVisibility(View.GONE);
@@ -182,8 +167,8 @@ public class order_completed_lab extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 String url=uri.toString();
-                Toast.makeText(order_completed_lab.this,"Download Started",Toast.LENGTH_LONG).show();
-                downloadFile(order_completed_lab.this,orderID,".pdf",DIRECTORY_DOWNLOADS,url);
+                Toast.makeText(order_completed_lab_forLab.this,"Download Started",Toast.LENGTH_LONG).show();
+                downloadFile(order_completed_lab_forLab.this,orderID,".pdf",DIRECTORY_DOWNLOADS,url);
 
             }
         }).addOnFailureListener(new OnFailureListener() {

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.fyp.SendNotificationPack.Token;
@@ -62,6 +63,9 @@ public class dashboard_lab extends AppCompatActivity {
     public static final int EMAILID=101;
     public static final int BUTTONID=102;
     File prescription;
+    TextView nameTV,usernameTV,phoneTV,emailTV;
+    RatingBar ratingBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +95,9 @@ public class dashboard_lab extends AppCompatActivity {
                 startActivity(new Intent(dashboard_lab.this, viewComplains.class));
             }
         });
-
+        inflateProfile();
         fillInProgressMenu();
-
+        inflateCompletedOrders();
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -136,6 +140,8 @@ public class dashboard_lab extends AppCompatActivity {
                     LinearLayout L = findViewById(R.id.settings);
                     L.setVisibility(View.VISIBLE);
 
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
 
                     return true;
                 }
@@ -146,6 +152,9 @@ public class dashboard_lab extends AppCompatActivity {
                     L1.setVisibility(View.GONE);
                     LinearLayout L = findViewById(R.id.browse);
                     L.setVisibility(View.VISIBLE);
+
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
 
 
                     return true;
@@ -158,11 +167,40 @@ public class dashboard_lab extends AppCompatActivity {
                     L1.setVisibility(View.VISIBLE);
                     LinearLayout L = findViewById(R.id.browse);
                     L.setVisibility(View.GONE);
+
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
                     return true;
 
 
 
                 }
+                if (item.getItemId() == R.id.bottomNavigationProfile) {
+                    LinearLayout L1=findViewById(R.id.settings);
+                    L1.setVisibility(View.GONE);
+                    L1=findViewById(R.id.in_progress_orders);
+                    L1.setVisibility(View.GONE);
+                    LinearLayout L = findViewById(R.id.browse);
+                    L.setVisibility(View.GONE);
+
+                    findViewById(R.id.completed_orders).setVisibility(View.GONE);
+                    findViewById(R.id.profile).setVisibility(View.VISIBLE);
+
+
+                    return true;
+                }
+                if (item.getItemId() == R.id.bottomNavigationCompleted) {
+                    LinearLayout L1=findViewById(R.id.settings);
+                    L1.setVisibility(View.GONE);
+                    L1=findViewById(R.id.in_progress_orders);
+                    L1.setVisibility(View.GONE);
+                    LinearLayout L = findViewById(R.id.browse);
+                    L.setVisibility(View.GONE);
+                    findViewById(R.id.completed_orders).setVisibility(View.VISIBLE);
+                    findViewById(R.id.profile).setVisibility(View.GONE);
+                    return true;
+                }
+
 
                 return false;
             }
@@ -328,5 +366,69 @@ public class dashboard_lab extends AppCompatActivity {
 
 
     }
+    void inflateProfile(){
+        nameTV=findViewById(R.id.profile_name);
+        emailTV=findViewById(R.id.profile_email);
+        ratingBar=findViewById(R.id.rating_bar);
+        usernameTV=findViewById(R.id.profile_username);
+        phoneTV=findViewById(R.id.profile_phone);
+        db=FirebaseFirestore.getInstance();
+        db.collection("users").document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                nameTV.setText("Name: "+documentSnapshot.getString("Full Name"));
+                emailTV.setText("Email: "+mAuth.getCurrentUser().getEmail());
+                ratingBar.setRating(Long.parseLong(documentSnapshot.getString("rating")));
+                usernameTV.setText("Username: "+documentSnapshot.getString("Username"));
+                phoneTV.setText("Phone: "+documentSnapshot.getString("Phone Number"));
+            }
+        });
+    }
+    void inflateCompletedOrders(){
+
+        db.collection("lab_orders_completed").document(mAuth.getCurrentUser().getEmail()).get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                findViewById(R.id.progress_bar_done).setVisibility(View.GONE);
+                if (!documentSnapshot.getString("count").equals("0")) {
+                    TextView tv=findViewById(R.id.no_orders_done);
+                    tv.setVisibility(View.GONE);
+                    for (int i = 1; i <= Integer.parseInt(documentSnapshot.getString("count")); i++) {
+                        LayoutInflater l = LayoutInflater.from(dashboard_lab.this);
+                        View v = l.inflate(R.layout.in_progress_orders_resource, null);
+                        LinearLayout parent = (LinearLayout) findViewById(R.id.orders_container_done);
+                        parent.addView(v);
+                        String stringText = "Order ID: " + documentSnapshot.getString("id" + i);
+                        TextView textView = findViewById(R.id.tv_customer);
+                        textView.setText(stringText);
+                        textView.setId(Integer.parseInt(Integer.toString(TVID) + i));
+                        textView = findViewById(R.id.email_hidden);
+                        textView.setText(documentSnapshot.getString("id" + i));
+                        textView.setId(Integer.parseInt(Integer.toString(EMAILID) + i));
+                        MaterialButton mButton = findViewById(R.id.details);
+                        mButton.setId(Integer.parseInt(Integer.toString(BUTTONID) + i));
+                        mButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TextView t = findViewById(Integer.parseInt(
+                                        EMAILID + String.valueOf(Integer.toString(v.getId())
+                                                .charAt(Integer.toString(v.getId()).length() - 1))));
+                                startActivity(new Intent(dashboard_lab.this, order_completed_lab_forLab.class)
+                                        .putExtra("orderID", t.getText()));
+                                Log.d("tag", "email:" + t.getText());
+                            }
+                        });
+                    }
+                }
+                else{
+                    TextView textView=findViewById(R.id.no_orders);
+                    textView.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+    }
+
 
 }

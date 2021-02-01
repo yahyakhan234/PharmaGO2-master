@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".order_completed_pharma"></activity>
+        <activity android:name=".order_completed_lab_forLab"></activity>
+        <activity android:name=".order_completed_pharma" />
         <activity android:name=".order_completed_lab" />
         <activity android:name=".customer_lab_booking" />
         <activity android:name=".lab_order_detail" />

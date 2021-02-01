@@ -218,7 +218,84 @@
 
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:isScrollContainer="true"
+        android:id="@+id/completed_orders">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="600dp">
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:isScrollContainer="true">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:background="@color/primaryTheme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Completed Orders"
+                        android:textColor="#fff"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/orders_container_done">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ProgressBar
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:indeterminate="true"
+                            android:visibility="visible"
+                            android:id="@+id/progress_bar_done"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="200dp"
+
+                            />
+                    </RelativeLayout>
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="30dp"
+                        android:text="No Completed Orders"
+                        android:id="@+id/no_orders_done"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear Pervious Orders"
+                android:layout_centerInParent="true"
+                android:id="@+id/clear_orders"
+                android:padding="10dp"
+                android:backgroundTint="@color/primaryTheme"/>
+        </RelativeLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

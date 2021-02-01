@@ -37,7 +37,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pharmacy Name:"
+        android:text="Name:"
         android:textStyle="bold"
         android:id="@+id/name_label"
         android:textSize="15sp"/>
@@ -68,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5/5"
+            android:id="@+id/rating"
             android:textSize="15sp"
             android:layout_toRightOf="@+id/rating_label"/>
     </RelativeLayout>
@@ -80,7 +81,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Orders Completed:"
+            android:text="Email:"
             android:textStyle="bold"
             android:id="@+id/orders_label"
             android:textSize="15sp"/>
@@ -90,6 +91,7 @@
             android:layout_height="wrap_content"
             android:text="5"
             android:textSize="15sp"
+            android:id="@+id/email"
             android:layout_toRightOf="@+id/orders_label"/>
     </RelativeLayout>
     <RelativeLayout
@@ -101,7 +103,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Orders Cancelled:"
+            android:text="Phone:"
             android:textStyle="bold"
             android:id="@+id/orders_cancelled_label"
             android:textSize="15sp"/>
@@ -111,28 +113,8 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textSize="15sp"
+            android:id="@+id/phone"
             android:layout_toRightOf="@+id/orders_cancelled_label"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date of Joining:"
-            android:textStyle="bold"
-            android:id="@+id/join_date_label"
-            android:textSize="15sp"/>
-        <TextView
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="12-11-2020"
-            android:textSize="15sp"
-            android:layout_toRightOf="@+id/join_date_label"/>
     </RelativeLayout>
     <fragment
         android:id="@+id/locCus"

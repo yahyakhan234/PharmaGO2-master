@@ -139,7 +139,7 @@ public class lab_price_order extends AppCompatActivity {
                                                                             db.collection("live_chat")
                                                                                     .document("LC"+orderID)
                                                                                     .set(map);
-                                                                            new GenerateNotif().sendNotificationToSingleUser(UID);
+                                                                            new GenerateNotif().sendNotificationToUserFromLab(UID);
                                                                             wait.dismiss();
                                                                             new AlertDialog.Builder(lab_price_order.this)
                                                                                     .setTitle("Done!")
